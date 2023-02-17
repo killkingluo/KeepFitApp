@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">KeepFitApp</string>
+    <string name="Home">Home</string>
+    <string name="History">History</string>
+    <string name="Settings">Settings</string>
+    <string name="LogSteps">LogSteps</string>
+    <string name="GoalSetting">LogSteps</string>
+    <string name="GoalAdd">LogSteps</string>
+
+    <string name="no_goal_description">Please add a new goal~</string>
+    <string name="goal_add_button">Add a new goal</string>
+</resources>
