@@ -4,7 +4,6 @@ import com.example.keepfitapp.data_source.RecordDao
 import com.example.keepfitapp.data_source.StepRecord
 import com.example.keepfitapp.domain.model.Record
 import kotlinx.coroutines.flow.Flow
-import java.sql.Date
 
 class RecordRepository(private val recordDao: RecordDao) {
     fun getCurrentSteps(date: Long): Flow<StepRecord> = recordDao.getCurrentSteps(date)

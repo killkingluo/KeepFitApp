@@ -35,7 +35,7 @@ fun GoalSetPage(navController: NavController, goalViewModel: GoalViewModel, reco
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
-            Button(onClick = {  navController.navigate("GoalAdd") }) {
+            Button(onClick = { navController.navigate("GoalAdd") }) {
                 Text(text = stringResource(id = R.string.goal_add_button))
             }
         }

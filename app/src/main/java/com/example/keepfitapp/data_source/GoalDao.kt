@@ -22,7 +22,7 @@ interface GoalDao {
     @Query("UPDATE goal_table SET activityFlag = 0 WHERE activityFlag = 1")
     suspend fun cancelActivityGoal()
 
-    //清除当前激活的目标
+    //激活目标
     @Query("UPDATE goal_table SET activityFlag = 1 WHERE id = :id")
     suspend fun newActivityGoal(id: Int)
 

@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.keepfitapp.TextFieldDemo
 import com.example.keepfitapp.domain.model.Goal
 import com.example.keepfitapp.domain.viewmodel.GoalViewModel
@@ -48,11 +49,13 @@ fun GoalAddPage(navController: NavController, goalViewModel: GoalViewModel) {
         ) {
             Button(
                 onClick = {
-                    newGoalNameErrorFlag = inputCheck(text = newGoalName, regex = "^\\w.+")
+                    newGoalNameErrorFlag = inputCheck(text = newGoalName, regex = "^\\w.*")
                     newGoalStepsErrorFlag = inputCheck(text = newGoalSteps, regex = "^[1-9]\\d+$")
                     if (newGoalNameErrorFlag == 0 && newGoalStepsErrorFlag == 0) {
                         goalViewModel.insert(Goal(name = newGoalName, steps = newGoalSteps.toInt(), activityFlag = 0))
-                        navController.navigate("GoalSetting")
+                        navController.navigate("GoalSetting") {
+                            popUpTo("GoalSetting") {inclusive = true}
+                        }
                     }
                 }
             ) {

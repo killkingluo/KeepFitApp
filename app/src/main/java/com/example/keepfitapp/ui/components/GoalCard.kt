@@ -1,13 +1,13 @@
 package com.example.keepfitapp.ui.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +24,8 @@ import com.example.keepfitapp.ui.theme.Blue700
 
 @Composable
 fun GoalCardDemo(goal: Goal, goalViewModel: GoalViewModel) {
+    val openDialog = remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -39,13 +41,11 @@ fun GoalCardDemo(goal: Goal, goalViewModel: GoalViewModel) {
             modifier = Modifier.fillMaxWidth().padding(8.dp)
         ){
             Column(
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(10.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
+                Text(
                         buildAnnotatedString {
                             withStyle(style = SpanStyle(fontWeight = FontWeight.W900,fontSize = 20.sp, letterSpacing = 1.sp))
                             {
@@ -61,15 +61,49 @@ fun GoalCardDemo(goal: Goal, goalViewModel: GoalViewModel) {
                             }
                         }
                     )
+            }
+            Row(
+                //modifier = Modifier.fillMaxHeight(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                //activity button
+                IconButton(
+                    onClick = {
+                        if(goal.activityFlag == 0) {
+                            goalViewModel.cancelActivityGoal()
+                            goalViewModel.newActivityGoal(goal.id)
+                        }
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Done,
+                        tint = Color.Black,
+                        contentDescription = null)
+                }
+                //delete button
+                IconButton( onClick = { openDialog.value = true } ) {
+                    Icon(
+                        imageVector = Icons.Filled.Delete,
+                        tint = Color.Black,
+                        contentDescription = null)
+                    if(goal.activityFlag == 1){
+                        SimpleAlertDialog(title = "Warning",
+                            alertContent = "You cannot delete an active target",
+                            openDialog.value, onDismiss = { openDialog.value = false }
+                        )
+                    }
+                    else {
+                        yesOrNoAlertDialog(
+                            title = "Delete Confirmation",
+                            alertContent = "Please confirm whether you want to delete goal?",
+                            openDialog = openDialog.value,
+                            onDismiss = { openDialog.value = false },
+                            toDO = { goalViewModel.delete(goal) }
+                        )
+                    }
                 }
             }
-            IconButton(
-                onClick = {
-                    goalViewModel.cancelActivityGoal()
-                    goalViewModel.newActivityGoal(goal.id)
-                }
-            ) {Icon(Icons.Filled.Done, null)}
-
         }
     }
 }

@@ -58,12 +58,11 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel)
                         selectedContentColor =  Blue700,
                         unselectedContentColor =  Color.Gray,
                         onClick = { navController.navigate(navigationItem.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
+                            popUpTo(navController.graph.findStartDestination().id) { saveState = true }
                             launchSingleTop = true
                             restoreState = true
-                        } }
+                        }
+                        }
                     )
                 }
             }
