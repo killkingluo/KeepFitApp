@@ -84,7 +84,7 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel)
                 SettingsPage(navController = navController)
             }
             composable(Screen.LogSteps.route) {
-                LogStepsPage(navController = navController)
+                LogStepsPage(navController = navController, recordViewModel = recordViewModel)
             }
             composable(route = Screen.GoalSetting.route) {
                 GoalSetPage(navController = navController, goalViewModel = goalViewModel, recordViewModel = recordViewModel)

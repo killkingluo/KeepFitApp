@@ -19,11 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.keepfitapp.domain.model.Goal
 import com.example.keepfitapp.domain.viewmodel.GoalViewModel
+import com.example.keepfitapp.domain.viewmodel.RecordViewModel
+import com.example.keepfitapp.ui.page.getTodayTimestamp
 import com.example.keepfitapp.ui.theme.Blue200
 import com.example.keepfitapp.ui.theme.Blue700
 
 @Composable
-fun GoalCardDemo(goal: Goal, goalViewModel: GoalViewModel) {
+fun GoalCardDemo(goal: Goal, goalViewModel: GoalViewModel, recordViewModel: RecordViewModel) {
+    val todayDate = getTodayTimestamp()
     val openDialog = remember { mutableStateOf(false) }
 
     Card(
@@ -73,6 +76,7 @@ fun GoalCardDemo(goal: Goal, goalViewModel: GoalViewModel) {
                         if(goal.activityFlag == 0) {
                             goalViewModel.cancelActivityGoal()
                             goalViewModel.newActivityGoal(goal.id)
+                            recordViewModel.updateTargetSteps(goal.steps, date = todayDate)
                         }
                     }
                 ) {
@@ -99,7 +103,9 @@ fun GoalCardDemo(goal: Goal, goalViewModel: GoalViewModel) {
                             alertContent = "Please confirm whether you want to delete goal?",
                             openDialog = openDialog.value,
                             onDismiss = { openDialog.value = false },
-                            toDO = { goalViewModel.delete(goal) }
+                            toDO = {
+                                goalViewModel.delete(goal)
+                            }
                         )
                     }
                 }

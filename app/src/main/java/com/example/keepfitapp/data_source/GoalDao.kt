@@ -18,6 +18,9 @@ interface GoalDao {
     @Query("SELECT * FROM goal_table WHERE activityFlag = 1 LIMIT 1")
     fun getActivityGoal(): Flow<Goal>
 
+    @Query("SELECT * FROM goal_table WHERE activityFlag = 1 LIMIT 1")
+    fun getActivityGoal2(): Goal?
+
     //清除当前激活的目标
     @Query("UPDATE goal_table SET activityFlag = 0 WHERE activityFlag = 1")
     suspend fun cancelActivityGoal()

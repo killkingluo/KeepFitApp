@@ -11,6 +11,8 @@ class GoalRepository(private val goalDao: GoalDao) {
 
     fun getActivityGoal(): Flow<Goal> = goalDao.getActivityGoal()
 
+    fun getActivityGoal2(): Goal? = goalDao.getActivityGoal2()
+
     suspend fun cancelActivityGoal() = goalDao.cancelActivityGoal()
 
     suspend fun newActivityGoal(id: Int) = goalDao.newActivityGoal(id)

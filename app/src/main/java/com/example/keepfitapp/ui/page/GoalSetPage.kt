@@ -13,8 +13,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
 import com.example.keepfitapp.domain.viewmodel.GoalViewModel
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.example.keepfitapp.R
 import com.example.keepfitapp.domain.viewmodel.RecordViewModel
@@ -28,14 +30,15 @@ fun GoalSetPage(navController: NavController, goalViewModel: GoalViewModel, reco
         LazyColumn() {
             items(goalListState.value.size) { index ->
             val goal = goalListState.value[index]
-                GoalCardDemo(goal = goal, goalViewModel = goalViewModel)
+                GoalCardDemo(goal = goal, goalViewModel = goalViewModel, recordViewModel = recordViewModel)
             }
         }
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
-            Button(onClick = { navController.navigate("GoalAdd") }) {
+            Button(
+                onClick = { navController.navigate("GoalAdd") } ) {
                 Text(text = stringResource(id = R.string.goal_add_button))
             }
         }

@@ -29,20 +29,17 @@ fun GoalAddPage(navController: NavController, goalViewModel: GoalViewModel) {
             style = MaterialTheme.typography.h6)
         newGoalName = TextFieldDemo(KeyboardType.Text)
         when (newGoalNameErrorFlag) {
-            1 -> errorMessage("Please enter the target name")
-            2 -> errorMessage("Please enter a string beginning with a letter")
+            1 -> errorMessage(meaasge = "Please enter the target name")
+            2 -> errorMessage(meaasge = "Please enter a string beginning with a letter")
         }
         Text(text = "Target Step Number",modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
             style = MaterialTheme.typography.h6)
         newGoalSteps = TextFieldDemo(KeyboardType.Number)
         when (newGoalStepsErrorFlag) {
-            1 -> errorMessage("Please enter the target steps")
-            2 -> errorMessage("Please enter number")
+            1 -> errorMessage(meaasge = "Please enter the target steps")
+            2 -> errorMessage(meaasge = "Please enter number")
         }
-//        if (newGoalStepsErrorFlag!=0) {
-//            errorMessage("Please enter the target steps")
-//        }
-        //ButtonDemo("Submit", navController, "GoalSetting")
+
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
@@ -50,7 +47,7 @@ fun GoalAddPage(navController: NavController, goalViewModel: GoalViewModel) {
             Button(
                 onClick = {
                     newGoalNameErrorFlag = inputCheck(text = newGoalName, regex = "^\\w.*")
-                    newGoalStepsErrorFlag = inputCheck(text = newGoalSteps, regex = "^[1-9]\\d+$")
+                    newGoalStepsErrorFlag = inputCheck(text = newGoalSteps, regex = "^[1-9]\\d*$")
                     if (newGoalNameErrorFlag == 0 && newGoalStepsErrorFlag == 0) {
                         goalViewModel.insert(Goal(name = newGoalName, steps = newGoalSteps.toInt(), activityFlag = 0))
                         navController.navigate("GoalSetting") {

@@ -1,23 +1,56 @@
 package com.example.keepfitapp.ui.page
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.keepfitapp.ButtonDemo
 import com.example.keepfitapp.CardDemo
 import com.example.keepfitapp.TextFieldDemo
+import com.example.keepfitapp.domain.model.Screen
+import com.example.keepfitapp.domain.viewmodel.RecordViewModel
 
 
 @Composable
-fun LogStepsPage(navController: NavController) {
+fun LogStepsPage(navController: NavController, recordViewModel: RecordViewModel) {
+    var inputSteps: String by remember{ mutableStateOf("") }
+    var inputStepsErrorFlag by remember{ mutableStateOf(0)}
+    val currentRecordState = recordViewModel.getCurrentSteps(getTodayTimestamp()).collectAsState(initial = null).value
+
     Column(modifier = Modifier.padding(5.dp)) {
-        CardDemo(2000, "Current   ")
-        TextFieldDemo(KeyboardType.Number)
-        ButtonDemo("Submit", navController, "Home")
+        CardDemo(steps = currentRecordState?.current_steps?: 0, cardName = "Current   ")
+        inputSteps = TextFieldDemo(KeyboardType.Number)
+        when (inputStepsErrorFlag) {
+            1 -> errorMessage(meaasge = "Please enter the target steps")
+            2 -> errorMessage(meaasge = "Please enter number")
+        }
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            Button(
+                onClick = {
+                    inputStepsErrorFlag = inputCheck(text = inputSteps, regex = "^[1-9]\\d*$")
+                    if (inputStepsErrorFlag == 0) {
+                        recordViewModel.updateCurrentSteps(
+                            current_steps = currentRecordState?.current_steps?.plus( inputSteps.toInt() ) ?: 0,
+                            date = getTodayTimestamp()
+                        )
+                        navController.navigate(Screen.Home.route) {
+                            popUpTo(Screen.Home.route) {inclusive = true}
+                        }
+                    }
+                }
+            ) {
+                Text("Submit")
+            }
+        }
     }
 }
