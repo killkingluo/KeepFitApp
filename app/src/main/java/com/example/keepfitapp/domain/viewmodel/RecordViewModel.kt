@@ -1,16 +1,14 @@
 package com.example.keepfitapp.domain.viewmodel
 
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import com.example.keepfitapp.data_source.StepRecord
+import com.example.keepfitapp.domain.function.getTodayTimestamp
 import com.example.keepfitapp.domain.model.Record
 import com.example.keepfitapp.domain.repository.GoalRepository
 import com.example.keepfitapp.domain.repository.RecordRepository
-import com.example.keepfitapp.ui.page.getTodayTimestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import java.sql.Date
 import javax.inject.Inject
 
 interface RecordViewModelAbstract {
@@ -40,15 +38,15 @@ class RecordViewModel @Inject constructor(private val recordRepository: RecordRe
             val todayDate = getTodayTimestamp()
             val lastDate = recordRepository.getLastDate()
             val activityGoalState = goalRepository.getActivityGoal2()
-                if(recordNumber == 0 || (recordNumber > 0 && lastDate != todayDate)) {
-                    recordRepository.insertRecord(
-                        Record(
-                            current_steps = 0,
-                            target_steps = activityGoalState?.steps ?: 0,
-                            joined_date = todayDate
-                        )
+            if (recordNumber == 0 || (recordNumber > 0 && lastDate != todayDate)) {
+                recordRepository.insertRecord(
+                    Record(
+                        current_steps = 0,
+                        target_steps = activityGoalState?.steps ?: 0,
+                        joined_date = todayDate
                     )
-                }
+                )
+            }
         }
     }
 

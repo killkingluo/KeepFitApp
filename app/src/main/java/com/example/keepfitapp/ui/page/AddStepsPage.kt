@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.keepfitapp.CardDemo
 import com.example.keepfitapp.TextFieldDemo
+import com.example.keepfitapp.domain.function.getTodayTimestamp
 import com.example.keepfitapp.domain.model.Screen
 import com.example.keepfitapp.domain.viewmodel.RecordViewModel
 

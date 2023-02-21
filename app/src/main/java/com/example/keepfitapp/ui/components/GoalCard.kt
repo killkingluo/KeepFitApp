@@ -17,16 +17,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.keepfitapp.domain.function.getTodayTimestamp
 import com.example.keepfitapp.domain.model.Goal
 import com.example.keepfitapp.domain.viewmodel.GoalViewModel
 import com.example.keepfitapp.domain.viewmodel.RecordViewModel
-import com.example.keepfitapp.ui.page.getTodayTimestamp
 import com.example.keepfitapp.ui.theme.Blue200
 import com.example.keepfitapp.ui.theme.Blue700
 
 @Composable
 fun GoalCardDemo(goal: Goal, goalViewModel: GoalViewModel, recordViewModel: RecordViewModel) {
-    val todayDate = getTodayTimestamp()
     val openDialog = remember { mutableStateOf(false) }
 
     Card(
@@ -76,7 +75,7 @@ fun GoalCardDemo(goal: Goal, goalViewModel: GoalViewModel, recordViewModel: Reco
                         if(goal.activityFlag == 0) {
                             goalViewModel.cancelActivityGoal()
                             goalViewModel.newActivityGoal(goal.id)
-                            recordViewModel.updateTargetSteps(goal.steps, date = todayDate)
+                            recordViewModel.updateTargetSteps(goal.steps, date = getTodayTimestamp())
                         }
                     }
                 ) {
