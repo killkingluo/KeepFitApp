@@ -35,8 +35,20 @@ class GoalViewModel @Inject constructor(
 ) : ViewModel(), GoalViewModelAbstract {
 
     override val getAllGoals: Flow<List<Goal>> = goalRepository.getAllGoals()
+    private lateinit var currentSelectGoal: Goal
     private var goalEditableFlag: Int = 0
+
     private val ioScope = CoroutineScope(Dispatchers.IO)
+
+    fun getCurrentSelectGoal(): Goal {
+        return currentSelectGoal
+    }
+
+    fun setCurrentSelectGoal(goal: Goal?){
+        if (goal != null) {
+            currentSelectGoal = goal
+        }
+    }
 
     fun getGoalEditableFlag(): Int {
         return goalEditableFlag

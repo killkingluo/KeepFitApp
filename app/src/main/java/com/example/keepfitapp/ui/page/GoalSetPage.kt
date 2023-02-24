@@ -14,6 +14,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import com.example.keepfitapp.R
+import com.example.keepfitapp.domain.model.Goal
 import com.example.keepfitapp.domain.model.Screen
 import com.example.keepfitapp.domain.viewmodel.RecordViewModel
 import com.example.keepfitapp.ui.components.GoalCardDemo
@@ -26,7 +27,7 @@ fun GoalSetPage(navController: NavController, goalViewModel: GoalViewModel, reco
         LazyColumn(modifier = Modifier.weight(1f)) {
             items(goalListState.value.size) { index ->
             val goal = goalListState.value[index]
-                GoalCardDemo(goal = goal, goalViewModel = goalViewModel, recordViewModel = recordViewModel)
+                GoalCardDemo(navController = navController, goal = goal, goalViewModel = goalViewModel, recordViewModel = recordViewModel)
             }
         }
         Box(
@@ -34,7 +35,10 @@ fun GoalSetPage(navController: NavController, goalViewModel: GoalViewModel, reco
             contentAlignment = Alignment.Center
         ) {
             Button(
-                onClick = { navController.navigate(route = Screen.GoalAdd.route) }
+                onClick = {
+                    goalViewModel.setCurrentSelectGoal(Goal(id = -1, name = "", steps = 0))
+                    navController.navigate(route = Screen.GoalAdd.route)
+                }
             ) {
                 Text(text = stringResource(id = R.string.goal_add_button))
             }

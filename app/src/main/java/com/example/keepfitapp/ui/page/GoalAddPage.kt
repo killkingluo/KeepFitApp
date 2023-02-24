@@ -19,8 +19,9 @@ import com.example.keepfitapp.domain.viewmodel.GoalViewModel
 
 @Composable
 fun GoalAddPage(navController: NavController, goalViewModel: GoalViewModel) {
-    var newGoalName: String by remember{ mutableStateOf("")}
-    var newGoalSteps: String by remember{ mutableStateOf("")}
+    val selectGoal = goalViewModel.getCurrentSelectGoal()
+    var newGoalName: String by remember{ mutableStateOf(selectGoal.name)}
+    var newGoalSteps: String by remember{ mutableStateOf(selectGoal.steps.toString())}
     var newGoalNameErrorFlag by remember{ mutableStateOf(0)}
     var newGoalStepsErrorFlag by remember{ mutableStateOf(0)}
 
@@ -28,14 +29,14 @@ fun GoalAddPage(navController: NavController, goalViewModel: GoalViewModel) {
         verticalArrangement = Arrangement.Center) {
         Text(text = "Goal Name",modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
             style = MaterialTheme.typography.h6)
-        newGoalName = TextFieldDemo(KeyboardType.Text, textFieldValue = "")
+        newGoalName = TextFieldDemo(KeyboardType.Text, textFieldValue = newGoalName)
         when (newGoalNameErrorFlag) {
             1 -> ErrorMessage(meaasge = "Please enter the target name")
             2 -> ErrorMessage(meaasge = "Please enter a string beginning with a letter")
         }
         Text(text = "Target Step Number",modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
             style = MaterialTheme.typography.h6)
-        newGoalSteps = TextFieldDemo(KeyboardType.Number, textFieldValue = "")
+        newGoalSteps = TextFieldDemo(KeyboardType.Number, textFieldValue = newGoalSteps)
         when (newGoalStepsErrorFlag) {
             1 -> ErrorMessage(meaasge = "Please enter the target steps")
             2 -> ErrorMessage(meaasge = "Please enter number")
@@ -50,7 +51,10 @@ fun GoalAddPage(navController: NavController, goalViewModel: GoalViewModel) {
                     newGoalNameErrorFlag = inputCheck(text = newGoalName, regex = "^\\w.*")
                     newGoalStepsErrorFlag = inputCheck(text = newGoalSteps, regex = "^[1-9]\\d*$")
                     if (newGoalNameErrorFlag == 0 && newGoalStepsErrorFlag == 0) {
-                        goalViewModel.insertGoal(Goal(name = newGoalName, steps = newGoalSteps.toInt(), activityFlag = 0))
+                        when(selectGoal.id) {
+                            -1 -> goalViewModel.insertGoal(Goal(name = newGoalName, steps = newGoalSteps.toInt()))
+                            else -> goalViewModel.insertGoal(Goal(id = selectGoal.id, name = newGoalName, steps = newGoalSteps.toInt(), activityFlag = selectGoal.activityFlag))
+                        }
                         navController.navigate(Screen.GoalSetting.route) {
                             popUpTo(Screen.GoalSetting.route) {inclusive = true}
                         }

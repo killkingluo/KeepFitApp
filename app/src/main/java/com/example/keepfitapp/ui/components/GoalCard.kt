@@ -5,6 +5,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,16 +18,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.keepfitapp.domain.function.getTodayTimestamp
 import com.example.keepfitapp.domain.model.Goal
+import com.example.keepfitapp.domain.model.Screen
 import com.example.keepfitapp.domain.viewmodel.GoalViewModel
 import com.example.keepfitapp.domain.viewmodel.RecordViewModel
 import com.example.keepfitapp.ui.theme.Blue200
 import com.example.keepfitapp.ui.theme.Blue700
 
 @Composable
-fun GoalCardDemo(goal: Goal, goalViewModel: GoalViewModel, recordViewModel: RecordViewModel) {
-    val openDialog = remember { mutableStateOf(false) }
+fun GoalCardDemo(navController: NavController, goal: Goal, goalViewModel: GoalViewModel, recordViewModel: RecordViewModel) {
+    val openDeleteDialog = remember { mutableStateOf(false) }
+    val openEditableDialog = remember { mutableStateOf(false) }
+    val openActivityGoalEditDialog = remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
@@ -102,30 +107,67 @@ fun GoalCardDemo(goal: Goal, goalViewModel: GoalViewModel, recordViewModel: Reco
                         contentDescription = null
                     )
                 }
+                //edit button
+                IconButton(
+                    onClick = {
+                        if(goalViewModel.getGoalEditableFlag() == 0) {
+                            openEditableDialog.value = true
+                        }
+                        else {
+                            if(goal.activityFlag == 1) {
+                                openActivityGoalEditDialog.value = true
+                            }
+                            else {
+                                goalViewModel.setCurrentSelectGoal(goal = goal)
+                                navController.navigate(route = Screen.GoalAdd.route)
+                            }
+                        }
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Edit,
+                        tint = Color.Black,
+                        contentDescription = null
+                    )
+                    if(openEditableDialog.value) {
+                            SimpleAlertDialog(
+                                title = "Warning",
+                                alertContent = "You set goal to be non-editable.",
+                                onDismiss = { openEditableDialog.value = false }
+                            )
+                    }
+                    else if(openActivityGoalEditDialog.value) {
+                        SimpleAlertDialog(
+                            title = "Warning",
+                            alertContent = "You cannot edit an activity goal!",
+                            onDismiss = { openActivityGoalEditDialog.value = false }
+                        )
+                    }
+                }
                 //delete button
                 IconButton(
-                    onClick = { openDialog.value = true }
+                    onClick = { openDeleteDialog.value = true }
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Delete,
                         tint = Color.Black,
                         contentDescription = null
                     )
-                    if (openDialog.value) {
+                    if (openDeleteDialog.value) {
                         if (goal.activityFlag == 1) {
                             SimpleAlertDialog(
                                 title = "Warning",
                                 alertContent = "You cannot delete an active target",
-                                onDismiss = { openDialog.value = false }
+                                onDismiss = { openDeleteDialog.value = false }
                             )
                         } else {
                             YesOrNoAlertDialog(
                                 title = "Delete Confirmation",
                                 alertContent = "Please confirm whether you want to delete goal ${goal.name}?",
-                                onDismiss = { openDialog.value = false },
+                                onDismiss = { openDeleteDialog.value = false },
                                 toDO = {
                                     goalViewModel.deleteGoal(goal)
-                                    openDialog.value = false
+                                    openDeleteDialog.value = false
                                 }
                             )
                         }
