@@ -24,7 +24,7 @@ import com.example.keepfitapp.domain.viewmodel.RecordViewModel
 fun LogStepsPage(navController: NavController, recordViewModel: RecordViewModel) {
     var inputSteps: String by remember{ mutableStateOf("") }
     var inputStepsErrorFlag by remember{ mutableStateOf(0)}
-    val currentRecordState = recordViewModel.getCurrentSteps(getTodayTimestamp()).collectAsState(initial = null).value
+    val currentRecordState = recordViewModel.getCurrentRecord(getTodayTimestamp()).collectAsState(initial = null).value
 
     Column(modifier = Modifier.padding(5.dp)) {
         CardDemo(steps = currentRecordState?.current_steps?: 0, cardName = "Current   ")

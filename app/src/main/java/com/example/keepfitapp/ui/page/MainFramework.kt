@@ -1,6 +1,8 @@
 package com.example.keepfitapp.ui.page
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -23,6 +25,7 @@ import com.example.keepfitapp.domain.viewmodel.RecordViewModel
 import com.example.keepfitapp.ui.theme.Blue700
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel) {

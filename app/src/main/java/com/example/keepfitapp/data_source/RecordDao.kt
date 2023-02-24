@@ -8,19 +8,23 @@ import kotlinx.coroutines.flow.Flow
 interface RecordDao {
 
     //获取全部记录
-    @Query("SELECT * FROM record_table ORDER BY id DESC")
+    @Query("SELECT * FROM record_table ORDER BY joined_date DESC")
     fun getAllRecords(): Flow<List<Record>>
 
+    //获取指定日期的记录flow
+    @Query("SELECT * FROM record_table WHERE joined_date = :date LIMIT 1")
+    fun getCurrentRecord(date: Long): Flow<Record>
+
     //获取指定日期的记录
-    @Query("SELECT current_steps,target_steps FROM record_table WHERE joined_date = :date LIMIT 1")
-    fun getCurrentSteps(date: Long): Flow<StepRecord>
+    @Query("SELECT * FROM record_table WHERE joined_date = :date LIMIT 1")
+    fun getSelectDateRecord(date: Long): Record?
 
     //获取一段时间的记录
-    @Query("SELECT current_steps,target_steps FROM record_table WHERE joined_date BETWEEN :begin_date AND :end_date")
-    fun getRecords(begin_date: Long, end_date: Long): Flow<List<StepRecord>>
+    @Query("SELECT * FROM record_table WHERE joined_date BETWEEN :begin_date AND :end_date ORDER BY joined_date DESC")
+    fun getRecords(begin_date: Long, end_date: Long): Flow<List<Record>>
 
     //获取最后一天的日期
-    @Query("SELECT * FROM record_table ORDER BY id DESC LIMIT 1")
+    @Query("SELECT * FROM record_table ORDER BY joined_date DESC LIMIT 1")
     fun getLastRecord(): Record?
 
     //检查是否有数据
@@ -39,16 +43,12 @@ interface RecordDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRecord(record: Record)
 
+    @Update
+    suspend fun updateRecord(record: Record)
+
     @Delete
     suspend fun deleteRecord(record: Record)
 
     @Query("DELETE FROM record_table")
     suspend fun deleteAllRecord()
 }
-
-
-//步数记录类
-data class StepRecord(
-    @ColumnInfo(name = "current_steps") val current_steps: Int,
-    @ColumnInfo(name = "target_steps") val target_steps: Int
-)

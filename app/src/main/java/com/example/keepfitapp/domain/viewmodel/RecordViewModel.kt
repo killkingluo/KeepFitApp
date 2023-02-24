@@ -1,7 +1,6 @@
 package com.example.keepfitapp.domain.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.keepfitapp.data_source.StepRecord
 import com.example.keepfitapp.domain.function.getTodayTimestamp
 import com.example.keepfitapp.domain.model.Record
 import com.example.keepfitapp.domain.repository.GoalRepository
@@ -13,12 +12,14 @@ import javax.inject.Inject
 
 interface RecordViewModelAbstract {
     fun getAllRecords(): Flow<List<Record>>
-    fun getCurrentSteps(date: Long): Flow<StepRecord>
-    fun getRecords(begin_date: Long, end_date: Long): Flow<List<StepRecord>>
+    fun getCurrentRecord(date: Long): Flow<Record>
+    fun getSelectDateRecord(date: Long)
+    fun getRecords(begin_date: Long, end_date: Long): Flow<List<Record>>
     fun getLastRecord(): Record?
     fun initialization()
     fun updateTargetSteps(target_steps: Int, date: Long)
     fun updateCurrentSteps(current_steps: Int, date: Long)
+    fun updateRecord(record: Record)
     fun insertRecord(record: Record)
     fun deleteRecord(record: Record)
     fun deleteAllRecord()
@@ -40,7 +41,19 @@ class RecordViewModel @Inject constructor(private val recordRepository: RecordRe
     }
 
     override fun getAllRecords(): Flow<List<Record>> = recordRepository.getAllRecords()
-    override fun getCurrentSteps(date: Long): Flow<StepRecord> = recordRepository.getCurrentSteps(date)
+    override fun getCurrentRecord(date: Long): Flow<Record> = recordRepository.getCurrentRecord(date)
+    override fun getSelectDateRecord(date: Long) {
+        ioScope.launch {
+            val activityGoalState = goalRepository.getActivityGoal2()
+            currentSelectedRecord = recordRepository.getSelectDateRecord(date)
+                ?: Record(
+                    id = -1,
+                    current_steps = 0,
+                    target_steps = activityGoalState?.steps ?: 0,
+                    joined_date = date
+                )
+        }
+    }
 
     override  fun getRecords(begin_date: Long, end_date: Long)  = recordRepository.getRecords(begin_date, end_date)
 
@@ -72,6 +85,10 @@ class RecordViewModel @Inject constructor(private val recordRepository: RecordRe
 
     override fun updateCurrentSteps(current_steps: Int, date: Long) {
         ioScope.launch { recordRepository.updateCurrentSteps(current_steps, date) }
+    }
+
+    override fun updateRecord(record: Record) {
+        ioScope.launch { recordRepository.updateRecord(record) }
     }
 
     override fun insertRecord(record: Record) {

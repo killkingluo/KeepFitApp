@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import com.example.keepfitapp.TextFieldDemo
 import com.example.keepfitapp.domain.function.inputCheck
 import com.example.keepfitapp.domain.function.timeStampToDate
+import com.example.keepfitapp.domain.model.Record
 import com.example.keepfitapp.domain.model.Screen
 import com.example.keepfitapp.domain.viewmodel.GoalViewModel
 import com.example.keepfitapp.domain.viewmodel.RecordViewModel
@@ -21,8 +22,8 @@ import com.example.keepfitapp.domain.viewmodel.RecordViewModel
 @Composable
 fun EditRecordPage(navController: NavController, goalViewModel: GoalViewModel, recordViewModel: RecordViewModel) {
     val currentSelectedRecord = recordViewModel.getCurrentSelectedRecord() //当前选中的记录
-    var inputSteps: String by remember{ mutableStateOf(currentSelectedRecord.current_steps.toString()) }
-    var inputGoalSteps by remember{ mutableStateOf(currentSelectedRecord.target_steps) } //当前的目标步数
+    var inputSteps by remember{ mutableStateOf(currentSelectedRecord.current_steps.toString()) }
+    var inputGoalSteps by remember{ mutableStateOf(currentSelectedRecord.target_steps) }
     var inputStepsErrorFlag by remember{ mutableStateOf(0) }
 
     Column(modifier = Modifier.padding(5.dp)) {
@@ -34,7 +35,7 @@ fun EditRecordPage(navController: NavController, goalViewModel: GoalViewModel, r
         Text(text = "Add steps",modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
             style = MaterialTheme.typography.h6)
         //输入步数
-        inputSteps = TextFieldDemo(KeyboardType.Number, textFieldValue = "")
+        inputSteps = TextFieldDemo(KeyboardType.Number, textFieldValue = inputSteps)
         when (inputStepsErrorFlag) {
             1 -> ErrorMessage(meaasge = "The number of steps cannot be empty")
             2 -> ErrorMessage(meaasge = "Please enter number")
@@ -53,14 +54,25 @@ fun EditRecordPage(navController: NavController, goalViewModel: GoalViewModel, r
                     //check input
                     inputStepsErrorFlag = inputCheck(text = inputSteps, regex = "^[0-9]\\d*$")
                     if (inputStepsErrorFlag == 0) {
-                        recordViewModel.updateCurrentSteps(
-                            current_steps = currentSelectedRecord.current_steps + inputSteps.toInt(),
-                            date = currentSelectedRecord.joined_date
-                        )
-                        recordViewModel.updateTargetSteps(
-                            target_steps = inputGoalSteps,
-                            date = currentSelectedRecord.joined_date
-                        )
+                        if(currentSelectedRecord.id != -1) {
+                            recordViewModel.updateRecord(
+                                Record(
+                                    id = currentSelectedRecord.id,
+                                    current_steps = currentSelectedRecord.current_steps + inputSteps.toInt(),
+                                    target_steps = inputGoalSteps,
+                                    joined_date = currentSelectedRecord.joined_date
+                                )
+                            )
+                        }
+                        else {
+                            recordViewModel.insertRecord(
+                                Record(
+                                    current_steps = currentSelectedRecord.current_steps + inputSteps.toInt(),
+                                    target_steps = inputGoalSteps,
+                                    joined_date = currentSelectedRecord.joined_date
+                                )
+                            )
+                        }
                         navController.navigate(Screen.History.route) {
                             popUpTo(Screen.History.route) {inclusive = true}
                         }

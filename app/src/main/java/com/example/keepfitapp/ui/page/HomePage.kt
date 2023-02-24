@@ -19,7 +19,7 @@ import com.example.keepfitapp.domain.viewmodel.RecordViewModel
 fun HomePage(navController: NavController, goalViewModel : GoalViewModel, recordViewModel: RecordViewModel) {
     val todayDate = getTodayTimestamp()
     val activityGoalState = goalViewModel.getActivityGoal().collectAsState(initial = null).value
-    val currentRecordState = recordViewModel.getCurrentSteps(todayDate).collectAsState(initial = null).value
+    val currentRecordState = recordViewModel.getCurrentRecord(todayDate).collectAsState(initial = null).value
     val currentRemainSteps = currentRecordState?.target_steps?.minus(currentRecordState.current_steps)?: 0
 
     recordViewModel.initialization() //检查：如果不存在今天的记录，新增记录
