@@ -6,9 +6,7 @@ import androidx.compose.material.*
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import com.example.keepfitapp.data_source.RecordDatabase
 import com.example.keepfitapp.domain.viewmodel.GoalViewModel
 import com.example.keepfitapp.domain.viewmodel.RecordViewModel
 import com.example.keepfitapp.ui.page.*
@@ -20,6 +18,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val goalViewModel: GoalViewModel by viewModels()
         val recordViewModel: RecordViewModel by viewModels()
+
         super.onCreate(savedInstanceState)
         setContent {
             KeepFitAppTheme{

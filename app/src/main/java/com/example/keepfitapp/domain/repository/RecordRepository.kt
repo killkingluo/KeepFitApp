@@ -7,11 +7,13 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class RecordRepository @Inject constructor(private val recordDao: RecordDao) {
+    fun getAllRecords(): Flow<List<Record>> = recordDao.getAllRecords()
+
     fun getCurrentSteps(date: Long): Flow<StepRecord> = recordDao.getCurrentSteps(date)
 
     fun getRecords(begin_date: Long, end_date: Long): Flow<List<StepRecord>> = recordDao.getRecords(begin_date, end_date)
 
-    fun getLastDate(): Long = recordDao.getLastDate()
+    fun getLastRecord(): Record? = recordDao.getLastRecord()
 
     fun recordCount(): Int = recordDao.recordCount()
 
@@ -22,4 +24,6 @@ class RecordRepository @Inject constructor(private val recordDao: RecordDao) {
     suspend fun insertRecord(record: Record) = recordDao.insertRecord(record)
 
     suspend fun deleteRecord(record: Record) = recordDao.deleteRecord(record)
+
+    suspend fun deleteAllRecord() = recordDao.deleteAllRecord()
 }

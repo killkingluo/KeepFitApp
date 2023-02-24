@@ -11,6 +11,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.keepfitapp.TextFieldDemo
+import com.example.keepfitapp.domain.function.inputCheck
 import com.example.keepfitapp.domain.model.Goal
 import com.example.keepfitapp.domain.model.Screen
 import com.example.keepfitapp.domain.viewmodel.GoalViewModel
@@ -27,17 +28,17 @@ fun GoalAddPage(navController: NavController, goalViewModel: GoalViewModel) {
         verticalArrangement = Arrangement.Center) {
         Text(text = "Goal Name",modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
             style = MaterialTheme.typography.h6)
-        newGoalName = TextFieldDemo(KeyboardType.Text)
+        newGoalName = TextFieldDemo(KeyboardType.Text, textFieldValue = "")
         when (newGoalNameErrorFlag) {
-            1 -> errorMessage(meaasge = "Please enter the target name")
-            2 -> errorMessage(meaasge = "Please enter a string beginning with a letter")
+            1 -> ErrorMessage(meaasge = "Please enter the target name")
+            2 -> ErrorMessage(meaasge = "Please enter a string beginning with a letter")
         }
         Text(text = "Target Step Number",modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
             style = MaterialTheme.typography.h6)
-        newGoalSteps = TextFieldDemo(KeyboardType.Number)
+        newGoalSteps = TextFieldDemo(KeyboardType.Number, textFieldValue = "")
         when (newGoalStepsErrorFlag) {
-            1 -> errorMessage(meaasge = "Please enter the target steps")
-            2 -> errorMessage(meaasge = "Please enter number")
+            1 -> ErrorMessage(meaasge = "Please enter the target steps")
+            2 -> ErrorMessage(meaasge = "Please enter number")
         }
 
         Box(
@@ -49,7 +50,7 @@ fun GoalAddPage(navController: NavController, goalViewModel: GoalViewModel) {
                     newGoalNameErrorFlag = inputCheck(text = newGoalName, regex = "^\\w.*")
                     newGoalStepsErrorFlag = inputCheck(text = newGoalSteps, regex = "^[1-9]\\d*$")
                     if (newGoalNameErrorFlag == 0 && newGoalStepsErrorFlag == 0) {
-                        goalViewModel.insert(Goal(name = newGoalName, steps = newGoalSteps.toInt(), activityFlag = 0))
+                        goalViewModel.insertGoal(Goal(name = newGoalName, steps = newGoalSteps.toInt(), activityFlag = 0))
                         navController.navigate(Screen.GoalSetting.route) {
                             popUpTo(Screen.GoalSetting.route) {inclusive = true}
                         }
@@ -63,7 +64,7 @@ fun GoalAddPage(navController: NavController, goalViewModel: GoalViewModel) {
 }
 
 @Composable
-fun errorMessage(meaasge: String){
+fun ErrorMessage(meaasge: String){
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
@@ -75,14 +76,3 @@ fun errorMessage(meaasge: String){
         )
     }
 }
-
-fun inputCheck(text: String, regex: String): Int {
-    if(text == "") {
-        return 1 //输入为空
-    }
-    else if(Regex(pattern = regex).matches(input = text)) {
-        return 0 //输入正确
-    }
-    return 2  //输入错误
-}
-

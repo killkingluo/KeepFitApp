@@ -1,9 +1,7 @@
 package com.example.keepfitapp.ui.page
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -30,7 +28,7 @@ import com.example.keepfitapp.ui.theme.Blue700
 fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel) {
     val scaffoldState = rememberScaffoldState()
     val navController = rememberNavController()
-    val navigationItems = listOf(Screen.Home, Screen.History, Screen.Settings)
+    val navigationItems = listOf(Screen.Home, Screen.History)
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -38,13 +36,18 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel)
         topBar = {
             TopAppBar(
                 backgroundColor = MaterialTheme.colors.surface,
-                navigationIcon = {
+                modifier= Modifier.fillMaxWidth()
+            ) {
+                Row(modifier= Modifier.fillMaxWidth()) {
                     IconButton(
                         onClick = { navController.navigateUp() }
                     ) { Icon(Icons.Filled.ArrowBack, null) }
-                },
-                title = { Text("Back") }
-            )
+                    Spacer(Modifier.weight(1f))
+                    IconButton(
+                        onClick = { navController.navigate(Screen.Settings.route) }
+                    ) { Icon(Icons.Filled.Settings, null) }
+                }
+            }
         },
         bottomBar = {
             BottomNavigation(backgroundColor = MaterialTheme.colors.surface) {
@@ -55,8 +58,7 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel)
                         icon = {
                             when(index){
                                 0 -> Icon(Icons.Filled.Home, contentDescription = null)
-                                1 -> Icon(Icons.Filled.Info, contentDescription = null)
-                                else -> Icon(Icons.Filled.Settings, contentDescription = null)
+                                else -> Icon(Icons.Filled.Info, contentDescription = null)
                             }
                         },
                         label = { Text(stringResource(navigationItem.resourceId)) },
@@ -90,10 +92,10 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel)
                     HomePage(navController = navController, recordViewModel = recordViewModel, goalViewModel = goalViewModel)
                 }
                 composable(Screen.History.route) {
-                    HistoryPage(navController = navController)
+                    HistoryPage(navController = navController, recordViewModel = recordViewModel, goalViewModel = goalViewModel)
                 }
                 composable(Screen.Settings.route) {
-                    SettingsPage(navController = navController)
+                    SettingsPage(goalViewModel = goalViewModel)
                 }
                 composable(Screen.LogSteps.route) {
                     LogStepsPage(navController = navController, recordViewModel = recordViewModel)
@@ -103,6 +105,9 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel)
                 }
                 composable(Screen.GoalAdd.route) {
                     GoalAddPage(navController = navController,goalViewModel = goalViewModel)
+                }
+                composable(Screen.EditRecord.route) {
+                    EditRecordPage(navController = navController,goalViewModel = goalViewModel, recordViewModel = recordViewModel)
                 }
             }
         }

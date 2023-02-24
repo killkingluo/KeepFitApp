@@ -11,4 +11,6 @@ sealed class Screen(val route: String, @StringRes val resourceId: Int) {
     object LogSteps : Screen("LogSteps", R.string.LogSteps)
     object GoalSetting : Screen("GoalSetting", R.string.GoalSetting)
     object GoalAdd : Screen("GoalAdd", R.string.GoalAdd)
+
+    object EditRecord : Screen("EditRecord", R.string.GoalAdd)
 }

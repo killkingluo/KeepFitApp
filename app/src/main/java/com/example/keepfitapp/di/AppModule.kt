@@ -2,11 +2,12 @@ package com.example.keepfitapp.di
 
 import android.app.Application
 import com.example.keepfitapp.data_source.GoalDao
-import com.example.keepfitapp.data_source.GoalDatabase
+import com.example.keepfitapp.data_source.KeepFitAppDatabase
 import com.example.keepfitapp.data_source.RecordDao
-import com.example.keepfitapp.data_source.RecordDatabase
+import com.example.keepfitapp.data_source.UserSettingDao
 import com.example.keepfitapp.domain.repository.GoalRepository
 import com.example.keepfitapp.domain.repository.RecordRepository
+import com.example.keepfitapp.domain.repository.UserSettingRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,20 +19,20 @@ import javax.inject.Singleton
 class AppModule {
     @Singleton
     @Provides
+    fun provideKeepFitAppDatabase(app: Application) : KeepFitAppDatabase{
+        return KeepFitAppDatabase.getInstance(context = app)
+    }
+
+    @Singleton
+    @Provides
     fun provideGoalRepository(goalDao: GoalDao): GoalRepository {
         return GoalRepository(goalDao = goalDao)
     }
 
     @Singleton
     @Provides
-    fun provideGoalDatabase(app: Application) : GoalDatabase{
-        return GoalDatabase.getInstance(context = app)
-    }
-
-    @Singleton
-    @Provides
-    fun provideGoalDao(goalDatabase: GoalDatabase) : GoalDao{
-        return goalDatabase.goalDao
+    fun provideGoalDao(keepFitAppDatabase: KeepFitAppDatabase) : GoalDao{
+        return keepFitAppDatabase.goalDao
     }
 
     @Singleton
@@ -42,13 +43,18 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideRecordDatabase(app: Application) : RecordDatabase{
-        return RecordDatabase.getInstance(context = app)
+    fun provideRecordDao(keepFitAppDatabase: KeepFitAppDatabase) : RecordDao{
+        return keepFitAppDatabase.recordDao
+    }
+    @Singleton
+    @Provides
+    fun provideUserSettingRepository(userSettingDao: UserSettingDao): UserSettingRepository {
+        return UserSettingRepository(userSettingDao = userSettingDao)
     }
 
     @Singleton
     @Provides
-    fun provideRecordDao(recordDatabase: RecordDatabase) : RecordDao{
-        return recordDatabase.recordDao
+    fun provideUserSettingDao(keepFitAppDatabase: KeepFitAppDatabase) : UserSettingDao {
+        return keepFitAppDatabase.userSettingDao
     }
 }

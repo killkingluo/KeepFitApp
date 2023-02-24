@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import com.example.keepfitapp.CardDemo
 import com.example.keepfitapp.TextFieldDemo
 import com.example.keepfitapp.domain.function.getTodayTimestamp
+import com.example.keepfitapp.domain.function.inputCheck
 import com.example.keepfitapp.domain.model.Screen
 import com.example.keepfitapp.domain.viewmodel.RecordViewModel
 
@@ -27,10 +28,10 @@ fun LogStepsPage(navController: NavController, recordViewModel: RecordViewModel)
 
     Column(modifier = Modifier.padding(5.dp)) {
         CardDemo(steps = currentRecordState?.current_steps?: 0, cardName = "Current   ")
-        inputSteps = TextFieldDemo(KeyboardType.Number)
+        inputSteps = TextFieldDemo(KeyboardType.Number, textFieldValue = "")
         when (inputStepsErrorFlag) {
-            1 -> errorMessage(meaasge = "Please enter the target steps")
-            2 -> errorMessage(meaasge = "Please enter number")
+            1 -> ErrorMessage(meaasge = "Please enter the target steps")
+            2 -> ErrorMessage(meaasge = "Please enter number")
         }
         Box(
             modifier = Modifier.fillMaxWidth(),

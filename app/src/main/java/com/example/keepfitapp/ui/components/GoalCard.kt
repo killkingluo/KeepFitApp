@@ -33,36 +33,56 @@ fun GoalCardDemo(goal: Goal, goalViewModel: GoalViewModel, recordViewModel: Reco
             .fillMaxWidth()
             .padding(10.dp),
         elevation = 10.dp,
-        backgroundColor = when(goal.activityFlag){
+        backgroundColor = when (goal.activityFlag) {
             0 -> Blue200
             else -> Blue700
         }
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth().padding(8.dp)
-        ){
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
             Column(
                 modifier = Modifier.padding(10.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                        buildAnnotatedString {
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.W900,fontSize = 20.sp, letterSpacing = 1.sp))
-                            {
-                                append(goal.name)
-                            }
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.W900,fontSize = 40.sp, letterSpacing = 1.sp, color = Color(0xFF4552B8))
-                            ) {
-                                append(goal.steps.toString())
-                            }
-                            withStyle(style = SpanStyle(fontWeight = FontWeight.W900,fontSize = 20.sp, letterSpacing = 1.sp))
-                            {
-                                append(" Steps")
-                            }
+                    buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.W900,
+                                fontSize = 10.sp,
+                                letterSpacing = 1.sp
+                            )
+                        )
+                        {
+                            append(goal.name)
                         }
-                    )
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.W900,
+                                fontSize = 20.sp,
+                                letterSpacing = 1.sp,
+                                color = Color(0xFF4552B8)
+                            )
+                        ) {
+                            append(goal.steps.toString())
+                        }
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.W900,
+                                fontSize = 10.sp,
+                                letterSpacing = 1.sp
+                            )
+                        )
+                        {
+                            append(" Steps")
+                        }
+                    }
+                )
             }
             Row(
                 //modifier = Modifier.fillMaxHeight(),
@@ -72,40 +92,43 @@ fun GoalCardDemo(goal: Goal, goalViewModel: GoalViewModel, recordViewModel: Reco
                 //activity button
                 IconButton(
                     onClick = {
-                        if(goal.activityFlag == 0) {
-                            goalViewModel.cancelActivityGoal()
-                            goalViewModel.newActivityGoal(goal.id)
-                            recordViewModel.updateTargetSteps(goal.steps, date = getTodayTimestamp())
-                        }
+                        goalViewModel.newActivityGoal(goal.id)
+                        recordViewModel.updateTargetSteps(target_steps = goal.steps, date = getTodayTimestamp())
                     }
                 ) {
                     Icon(
                         imageVector = Icons.Filled.Done,
                         tint = Color.Black,
-                        contentDescription = null)
+                        contentDescription = null
+                    )
                 }
                 //delete button
-                IconButton( onClick = { openDialog.value = true } ) {
+                IconButton(
+                    onClick = { openDialog.value = true }
+                ) {
                     Icon(
                         imageVector = Icons.Filled.Delete,
                         tint = Color.Black,
-                        contentDescription = null)
-                    if(goal.activityFlag == 1){
-                        SimpleAlertDialog(title = "Warning",
-                            alertContent = "You cannot delete an active target",
-                            openDialog.value, onDismiss = { openDialog.value = false }
-                        )
-                    }
-                    else {
-                        yesOrNoAlertDialog(
-                            title = "Delete Confirmation",
-                            alertContent = "Please confirm whether you want to delete goal?",
-                            openDialog = openDialog.value,
-                            onDismiss = { openDialog.value = false },
-                            toDO = {
-                                goalViewModel.delete(goal)
-                            }
-                        )
+                        contentDescription = null
+                    )
+                    if (openDialog.value) {
+                        if (goal.activityFlag == 1) {
+                            SimpleAlertDialog(
+                                title = "Warning",
+                                alertContent = "You cannot delete an active target",
+                                onDismiss = { openDialog.value = false }
+                            )
+                        } else {
+                            YesOrNoAlertDialog(
+                                title = "Delete Confirmation",
+                                alertContent = "Please confirm whether you want to delete goal ${goal.name}?",
+                                onDismiss = { openDialog.value = false },
+                                toDO = {
+                                    goalViewModel.deleteGoal(goal)
+                                    openDialog.value = false
+                                }
+                            )
+                        }
                     }
                 }
             }

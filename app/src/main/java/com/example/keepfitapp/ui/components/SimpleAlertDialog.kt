@@ -14,8 +14,7 @@ import com.example.keepfitapp.domain.viewmodel.GoalViewModel
 import com.example.keepfitapp.ui.theme.Purple500
 
 @Composable
-fun SimpleAlertDialog(title: String, alertContent: String, openDialog: Boolean, onDismiss: () -> Unit) {
-    if(openDialog){
+fun SimpleAlertDialog(title: String, alertContent: String,onDismiss: () -> Unit) {
         AlertDialog(
             title = { Text(text = title) },
             text = { Text(text = alertContent) },
@@ -28,5 +27,4 @@ fun SimpleAlertDialog(title: String, alertContent: String, openDialog: Boolean, 
                 }
             }
         )
-    }
 }

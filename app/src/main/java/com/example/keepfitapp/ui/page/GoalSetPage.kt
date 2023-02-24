@@ -10,10 +10,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavController
 import com.example.keepfitapp.domain.viewmodel.GoalViewModel
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.example.keepfitapp.R
 import com.example.keepfitapp.domain.model.Screen
@@ -36,7 +34,8 @@ fun GoalSetPage(navController: NavController, goalViewModel: GoalViewModel, reco
             contentAlignment = Alignment.Center
         ) {
             Button(
-                onClick = { navController.navigate(Screen.GoalAdd.route) } ) {
+                onClick = { navController.navigate(route = Screen.GoalAdd.route) }
+            ) {
                 Text(text = stringResource(id = R.string.goal_add_button))
             }
         }

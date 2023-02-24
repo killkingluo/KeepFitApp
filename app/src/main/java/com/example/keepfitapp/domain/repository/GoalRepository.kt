@@ -17,7 +17,7 @@ class GoalRepository(private val goalDao: GoalDao) {
 
     suspend fun newActivityGoal(id: Int) = goalDao.newActivityGoal(id)
 
-    suspend fun insert(goal: Goal) = goalDao.insertGoal(goal)
+    suspend fun insertGoal(goal: Goal) = goalDao.insertGoal(goal)
 
-    suspend fun delete(goal: Goal) = goalDao.deleteGoal(goal)
+    suspend fun deleteGoal(goal: Goal) = goalDao.deleteGoal(goal)
 }

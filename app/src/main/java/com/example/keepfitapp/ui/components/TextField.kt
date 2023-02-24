@@ -19,8 +19,8 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun TextFieldDemo(keyboardType: KeyboardType): String {
-    var text by remember{ mutableStateOf("")}
+fun TextFieldDemo(keyboardType: KeyboardType, textFieldValue :String): String {
+    var text by remember{ mutableStateOf(textFieldValue)}
     val keyboardController = LocalSoftwareKeyboardController.current
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -41,8 +41,4 @@ fun TextFieldDemo(keyboardType: KeyboardType): String {
         )
     }
     return text
-}
-
-fun isNumberCheck(text: String): Boolean{
-    return text == ""
 }

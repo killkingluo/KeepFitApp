@@ -6,8 +6,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 
 @Composable
-fun yesOrNoAlertDialog(title: String, alertContent: String, openDialog: Boolean, onDismiss: () -> Unit, toDO: () -> Unit) {
-    if(openDialog){
+fun YesOrNoAlertDialog(title: String, alertContent: String, onDismiss: () -> Unit, toDO: () -> Unit) {
         AlertDialog(
             title = { Text(text = title) },
             text = { Text(text = alertContent) },
@@ -16,16 +15,15 @@ fun yesOrNoAlertDialog(title: String, alertContent: String, openDialog: Boolean,
                 TextButton(
                     onClick = toDO
                 ) {
-                    Text("OK")
+                    Text("Yes")
                 }
             },
             dismissButton = {
                 TextButton(
                     onClick = onDismiss
                 ) {
-                    Text("Cancel")
+                    Text("No")
                 }
             }
         )
-    }
 }

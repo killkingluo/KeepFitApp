@@ -6,6 +6,7 @@
     <string name="LogSteps">LogSteps</string>
     <string name="GoalSetting">GoalSetting</string>
     <string name="GoalAdd">GoalAdd</string>
+    <string name="EditRecord">EditRecord</string>
 
     <string name="no_goal_description">Please add a new goal~</string>
     <string name="goal_add_button">Add a new goal</string>

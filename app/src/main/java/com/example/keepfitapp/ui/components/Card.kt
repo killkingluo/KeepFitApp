@@ -1,11 +1,12 @@
 package com.example.keepfitapp
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,10 +17,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.keepfitapp.domain.model.Goal
+import androidx.navigation.NavController
+import com.example.keepfitapp.domain.function.timeStampToDate
+import com.example.keepfitapp.domain.model.Record
+import com.example.keepfitapp.domain.model.Screen
+import com.example.keepfitapp.domain.viewmodel.RecordViewModel
 
 @Composable
-fun CardDemo(steps: Int,cardName: String) {
+fun CardDemo(steps: Int, cardName: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -35,15 +40,33 @@ fun CardDemo(steps: Int,cardName: String) {
             ) {
                 Text(
                     buildAnnotatedString {
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.W900,fontSize = 20.sp, letterSpacing = 1.sp))
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.W900,
+                                fontSize = 20.sp,
+                                letterSpacing = 1.sp
+                            )
+                        )
                         {
-                                append(cardName)
+                            append(cardName)
                         }
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.W900,fontSize = 40.sp, letterSpacing = 1.sp, color = Color(0xFF4552B8))
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.W900,
+                                fontSize = 40.sp,
+                                letterSpacing = 1.sp,
+                                color = Color(0xFF4552B8)
+                            )
                         ) {
                             append(steps.toString())
                         }
-                        withStyle(style = SpanStyle(fontWeight = FontWeight.W900,fontSize = 20.sp, letterSpacing = 1.sp))
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.W900,
+                                fontSize = 20.sp,
+                                letterSpacing = 1.sp
+                            )
+                        )
                         {
                             append(" Steps")
                         }
@@ -53,3 +76,90 @@ fun CardDemo(steps: Int,cardName: String) {
         }
     }
 }
+//For history page to use
+@Composable
+fun HistoryCardDemo(record: Record, navController: NavController, recordViewModel: RecordViewModel) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        elevation = 10.dp
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth().padding(8.dp)
+        ){
+            Column(
+                modifier = Modifier.padding(10.dp),
+                verticalArrangement = Arrangement.Center,
+                //horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.W900,
+                                fontSize = 20.sp,
+                                letterSpacing = 1.sp,
+                                color = Color(0xFF4552B8)
+                            )
+                        )
+                        {
+                            append(record.current_steps.toString())
+                        }
+                        withStyle(
+                            style = SpanStyle(
+                                color = Color.Black,
+                                fontWeight = FontWeight.W900,
+                                fontSize = 20.sp,
+                                letterSpacing = 1.sp
+                            )
+                        )
+                        {
+                            append("/")
+                        }
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.W900,
+                                fontSize = 20.sp,
+                                letterSpacing = 1.sp,
+                                color = Color(0xFF4552B8)
+                            )
+                        ) {
+                            append(record.target_steps.toString())
+                        }
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.W900,
+                                fontSize = 20.sp,
+                                letterSpacing = 1.sp
+                            )
+                        )
+                        {
+                            append(" Steps")
+                        }
+                    }
+                )
+                Text(
+                    text = timeStampToDate(record.joined_date),
+                    fontWeight = FontWeight.W900,
+                    fontSize = 20.sp,
+                    letterSpacing = 1.sp
+                )
+            }
+            IconButton(
+                onClick = {
+                    recordViewModel.setCurrentSelectedRecord(record)
+                    navController.navigate(route = Screen.EditRecord.route)
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Edit,
+                    tint = Color.Black,
+                    contentDescription = null)
+            }
+
+        }
+    }
+}
+
