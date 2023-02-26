@@ -11,20 +11,24 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.keepfitapp.TextFieldDemo
 import com.example.keepfitapp.domain.function.inputCheck
 import com.example.keepfitapp.domain.function.timeStampToDate
 import com.example.keepfitapp.domain.model.Record
 import com.example.keepfitapp.domain.model.Screen
 import com.example.keepfitapp.domain.viewmodel.GoalViewModel
 import com.example.keepfitapp.domain.viewmodel.RecordViewModel
+import com.example.keepfitapp.ui.components.textFieldDemo
 
 @Composable
-fun EditRecordPage(navController: NavController, goalViewModel: GoalViewModel, recordViewModel: RecordViewModel) {
+fun EditRecordPage(
+    navController: NavController,
+    goalViewModel: GoalViewModel,
+    recordViewModel: RecordViewModel
+) {
     val currentSelectedRecord = recordViewModel.getCurrentSelectedRecord() //当前选中的记录
-    var inputSteps by remember{ mutableStateOf(currentSelectedRecord.current_steps.toString()) }
-    var inputGoalSteps by remember{ mutableStateOf(currentSelectedRecord.target_steps) }
-    var inputStepsErrorFlag by remember{ mutableStateOf(0) }
+    var inputSteps by remember { mutableStateOf(currentSelectedRecord.current_steps.toString()) }
+    var inputGoalSteps by remember { mutableStateOf(currentSelectedRecord.target_steps) }
+    var inputError by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.padding(5.dp)) {
         Text(
@@ -32,16 +36,17 @@ fun EditRecordPage(navController: NavController, goalViewModel: GoalViewModel, r
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
         )
-        Text(text = "Add steps",modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-            style = MaterialTheme.typography.h6)
+        Text(
+            text = "Add steps", modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+            style = MaterialTheme.typography.h6
+        )
         //输入步数
-        inputSteps = TextFieldDemo(KeyboardType.Number, textFieldValue = inputSteps)
-        when (inputStepsErrorFlag) {
-            1 -> ErrorMessage(meaasge = "The number of steps cannot be empty")
-            2 -> ErrorMessage(meaasge = "Please enter number")
-        }
-        Text(text = "Select a new goal",modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-            style = MaterialTheme.typography.h6)
+        inputSteps = textFieldDemo(KeyboardType.Number, textFieldValue = inputSteps, checkType = 0)
+        Text(
+            text = "Select a new goal",
+            modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+            style = MaterialTheme.typography.h6
+        )
         //选择目标
         inputGoalSteps = goalDropdownMenu(inputGoalSteps, goalViewModel)
 
@@ -52,29 +57,32 @@ fun EditRecordPage(navController: NavController, goalViewModel: GoalViewModel, r
             Button(
                 onClick = {
                     //check input
-                    inputStepsErrorFlag = inputCheck(text = inputSteps, regex = "^[0-9]\\d*$")
-                    if (inputStepsErrorFlag == 0) {
-                        if(currentSelectedRecord.id != -1) {
+                    inputError = inputCheck(text = inputSteps, regex = "^\\d{1,7}\$")
+                    if (!inputError) {
+                        var totalSteps = currentSelectedRecord.current_steps + inputSteps.toInt()
+                        if (totalSteps > 9999999) {
+                            totalSteps = 9999999
+                        }
+                        if (currentSelectedRecord.id != -1) {
                             recordViewModel.updateRecord(
                                 Record(
                                     id = currentSelectedRecord.id,
-                                    current_steps = currentSelectedRecord.current_steps + inputSteps.toInt(),
+                                    current_steps = totalSteps,
                                     target_steps = inputGoalSteps,
                                     joined_date = currentSelectedRecord.joined_date
                                 )
                             )
-                        }
-                        else {
+                        } else {
                             recordViewModel.insertRecord(
                                 Record(
-                                    current_steps = currentSelectedRecord.current_steps + inputSteps.toInt(),
+                                    current_steps = totalSteps,
                                     target_steps = inputGoalSteps,
                                     joined_date = currentSelectedRecord.joined_date
                                 )
                             )
                         }
                         navController.navigate(Screen.History.route) {
-                            popUpTo(Screen.History.route) {inclusive = true}
+                            popUpTo(Screen.History.route) { inclusive = true }
                         }
                     }
                 }
@@ -87,7 +95,7 @@ fun EditRecordPage(navController: NavController, goalViewModel: GoalViewModel, r
 
 @Composable
 fun goalDropdownMenu(currentGoalSteps: Int, goalViewModel: GoalViewModel): Int {
-    var goalSteps = remember { mutableStateOf(currentGoalSteps) }
+    val goalSteps = remember { mutableStateOf(currentGoalSteps) }
     val expanded = remember { mutableStateOf(false) }
     val goalListState = goalViewModel.getAllGoals.collectAsState(initial = listOf())
 
@@ -99,7 +107,9 @@ fun goalDropdownMenu(currentGoalSteps: Int, goalViewModel: GoalViewModel): Int {
     ) {
         TextButton(
             onClick = { expanded.value = true },
-            modifier = Modifier.background(Color.LightGray).fillMaxWidth()
+            modifier = Modifier
+                .background(Color.LightGray)
+                .fillMaxWidth()
         ) {
             Text(text = "${goalSteps.value} steps")
         }
@@ -109,11 +119,11 @@ fun goalDropdownMenu(currentGoalSteps: Int, goalViewModel: GoalViewModel): Int {
             expanded = expanded.value,
             onDismissRequest = { expanded.value = false },
         ) {
-            for(item in goalListState.value) {
+            for (item in goalListState.value) {
                 DropdownMenuItem(
                     onClick = {
                         expanded.value = false
-                        goalSteps.value =  item.steps
+                        goalSteps.value = item.steps
                     }
                 ) {
                     Text(

@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -24,11 +25,13 @@ import com.example.keepfitapp.domain.model.Goal
 import com.example.keepfitapp.domain.model.Screen
 import com.example.keepfitapp.domain.viewmodel.GoalViewModel
 import com.example.keepfitapp.domain.viewmodel.RecordViewModel
+import com.example.keepfitapp.domain.viewmodel.UserSettingViewModel
 import com.example.keepfitapp.ui.theme.Blue200
 import com.example.keepfitapp.ui.theme.Blue700
 
 @Composable
-fun GoalCardDemo(navController: NavController, goal: Goal, goalViewModel: GoalViewModel, recordViewModel: RecordViewModel) {
+fun GoalCardDemo(navController: NavController, goal: Goal, goalViewModel: GoalViewModel, recordViewModel: RecordViewModel, userSettingViewModel: UserSettingViewModel) {
+    val goalEditable = userSettingViewModel.goalEditable.collectAsState(initial = false)
     val openDeleteDialog = remember { mutableStateOf(false) }
     val openEditableDialog = remember { mutableStateOf(false) }
     val openActivityGoalEditDialog = remember { mutableStateOf(false) }
@@ -90,7 +93,6 @@ fun GoalCardDemo(navController: NavController, goal: Goal, goalViewModel: GoalVi
                 )
             }
             Row(
-                //modifier = Modifier.fillMaxHeight(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -110,7 +112,7 @@ fun GoalCardDemo(navController: NavController, goal: Goal, goalViewModel: GoalVi
                 //edit button
                 IconButton(
                     onClick = {
-                        if(goalViewModel.getGoalEditableFlag() == 0) {
+                        if(!goalEditable.value) {
                             openEditableDialog.value = true
                         }
                         else {

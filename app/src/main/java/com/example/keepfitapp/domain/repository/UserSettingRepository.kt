@@ -1,19 +1,18 @@
 package com.example.keepfitapp.domain.repository
 
 
-import com.example.keepfitapp.data_source.UserSettingDao
-import com.example.keepfitapp.domain.model.UserSetting
+import com.example.keepfitapp.data_source.DateStoreManager
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class UserSettingRepository @Inject constructor(private val userSettingDao: UserSettingDao) {
+class UserSettingRepository @Inject constructor(private val dateStoreManager: DateStoreManager) {
 
-    fun getGoalEditableFlag(): Int?  = userSettingDao.getGoalEditableFlag()
+    suspend fun setUserSetting(goalEditable: Boolean) {
+        dateStoreManager.setGoalEditable(goalEditable)
+    }
 
-    fun dataCheck(): Int = userSettingDao.dataCheck()
+    fun getUserSetting(): Flow<Boolean> {
+        return dateStoreManager.getGoalEditable()
+    }
 
-    suspend fun updateGoalEditableFlag(flag: Int) = userSettingDao.updateGoalEditableFlag(flag)
-
-    suspend fun insertFlag(goalEditableFlag: UserSetting) = userSettingDao.insertFlag(goalEditableFlag)
-
-    suspend fun deleteFlag(goalEditableFlag: UserSetting) = userSettingDao.deleteFlag(goalEditableFlag)
 }

@@ -20,11 +20,13 @@ fun HomePage(navController: NavController, goalViewModel : GoalViewModel, record
     val todayDate = getTodayTimestamp()
     val activityGoalState = goalViewModel.getActivityGoal().collectAsState(initial = null).value
     val currentRecordState = recordViewModel.getCurrentRecord(todayDate).collectAsState(initial = null).value
-    val currentRemainSteps = currentRecordState?.target_steps?.minus(currentRecordState.current_steps)?: 0
+    var currentRemainSteps = currentRecordState?.target_steps?.minus(currentRecordState.current_steps)?: 0
 
     recordViewModel.initialization() //检查：如果不存在今天的记录，新增记录
-    goalViewModel.initialization() //检查：是否需要初始化用户设置
 
+    if(currentRemainSteps < 0) {
+        currentRemainSteps = 0
+    }
     Column(modifier = Modifier.padding(5.dp)) {
         //如果不存在激活的目标，提示去激活目标
         if (activityGoalState == null) {

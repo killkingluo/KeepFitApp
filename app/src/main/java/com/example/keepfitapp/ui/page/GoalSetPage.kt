@@ -17,17 +17,18 @@ import com.example.keepfitapp.R
 import com.example.keepfitapp.domain.model.Goal
 import com.example.keepfitapp.domain.model.Screen
 import com.example.keepfitapp.domain.viewmodel.RecordViewModel
+import com.example.keepfitapp.domain.viewmodel.UserSettingViewModel
 import com.example.keepfitapp.ui.components.GoalCardDemo
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
-fun GoalSetPage(navController: NavController, goalViewModel: GoalViewModel, recordViewModel: RecordViewModel) {
+fun GoalSetPage(navController: NavController, goalViewModel: GoalViewModel, recordViewModel: RecordViewModel, userSettingViewModel: UserSettingViewModel) {
     val goalListState = goalViewModel.getAllGoals.collectAsState(initial = listOf())
     Column(modifier = Modifier.padding(5.dp).fillMaxSize()) {
         LazyColumn(modifier = Modifier.weight(1f)) {
             items(goalListState.value.size) { index ->
             val goal = goalListState.value[index]
-                GoalCardDemo(navController = navController, goal = goal, goalViewModel = goalViewModel, recordViewModel = recordViewModel)
+                GoalCardDemo(navController = navController, goal = goal, goalViewModel = goalViewModel, recordViewModel = recordViewModel, userSettingViewModel = userSettingViewModel)
             }
         }
         Box(

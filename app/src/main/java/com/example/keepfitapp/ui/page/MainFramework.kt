@@ -22,13 +22,14 @@ import com.example.keepfitapp.*
 import com.example.keepfitapp.domain.model.Screen
 import com.example.keepfitapp.domain.viewmodel.GoalViewModel
 import com.example.keepfitapp.domain.viewmodel.RecordViewModel
+import com.example.keepfitapp.domain.viewmodel.UserSettingViewModel
 import com.example.keepfitapp.ui.theme.Blue700
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel) {
+fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel, userSettingViewModel: UserSettingViewModel) {
     val scaffoldState = rememberScaffoldState()
     val navController = rememberNavController()
     val navigationItems = listOf(Screen.Home, Screen.History)
@@ -47,7 +48,13 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel)
                     ) { Icon(Icons.Filled.ArrowBack, null) }
                     Spacer(Modifier.weight(1f))
                     IconButton(
-                        onClick = { navController.navigate(Screen.Settings.route) }
+                        onClick = {
+                            navController.navigate(Screen.Settings.route) {
+                                popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }
                     ) { Icon(Icons.Filled.Settings, null) }
                 }
             }
@@ -98,13 +105,13 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel)
                     HistoryPage(navController = navController, recordViewModel = recordViewModel, goalViewModel = goalViewModel)
                 }
                 composable(Screen.Settings.route) {
-                    SettingsPage(goalViewModel = goalViewModel)
+                    SettingsPage(userSettingViewModel = userSettingViewModel)
                 }
                 composable(Screen.LogSteps.route) {
                     LogStepsPage(navController = navController, recordViewModel = recordViewModel)
                 }
                 composable(route = Screen.GoalSetting.route) {
-                    GoalSetPage(navController = navController, goalViewModel = goalViewModel, recordViewModel = recordViewModel)
+                    GoalSetPage(navController = navController, goalViewModel = goalViewModel, recordViewModel = recordViewModel, userSettingViewModel = userSettingViewModel)
                 }
                 composable(Screen.GoalAdd.route) {
                     GoalAddPage(navController = navController,goalViewModel = goalViewModel)

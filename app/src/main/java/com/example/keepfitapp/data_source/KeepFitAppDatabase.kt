@@ -6,13 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.keepfitapp.domain.model.Goal
 import com.example.keepfitapp.domain.model.Record
-import com.example.keepfitapp.domain.model.UserSetting
 
-@Database(entities = [Goal::class, Record::class, UserSetting::class], version = 1, exportSchema = false)
+@Database(entities = [Goal::class, Record::class], version = 1, exportSchema = false)
 abstract class KeepFitAppDatabase: RoomDatabase() {
     abstract val goalDao: GoalDao
     abstract val recordDao: RecordDao
-    abstract val userSettingDao: UserSettingDao
 
     //初始化db
     companion object {

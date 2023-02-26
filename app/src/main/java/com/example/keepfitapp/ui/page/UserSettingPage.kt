@@ -6,21 +6,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.keepfitapp.domain.viewmodel.GoalViewModel
-import com.example.keepfitapp.ui.components.SwitchDemo
+import com.example.keepfitapp.domain.viewmodel.UserSettingViewModel
 
 @Composable
-fun SettingsPage(goalViewModel: GoalViewModel) {
-    val isCheck = remember { mutableStateOf(false) }
-
-    if (goalViewModel.getGoalEditableFlag() != 0) {
-        isCheck.value = true
-    }
+fun SettingsPage(userSettingViewModel: UserSettingViewModel) {
+    val isCheck = userSettingViewModel.goalEditable.collectAsState(initial = false)
 
     Row(modifier = Modifier.padding(5.dp)) {
         Text(
@@ -30,18 +27,9 @@ fun SettingsPage(goalViewModel: GoalViewModel) {
         Spacer(Modifier.weight(1f))
         Switch(checked = isCheck.value,
             onCheckedChange = {
-                isCheck.value = it
-                when(isCheck.value) {
-                    true -> {
-                        goalViewModel.updateGoalEditableFlag(flag = 1)
-                        goalViewModel.setGoalEditableFlag(1)
-                    }
-                    else -> {
-                        goalViewModel.updateGoalEditableFlag(flag = 0)
-                        goalViewModel.setGoalEditableFlag(0)
-                    }
-                }
+                userSettingViewModel.setUserSetting(it)
             }
         )
+
     }
 }
