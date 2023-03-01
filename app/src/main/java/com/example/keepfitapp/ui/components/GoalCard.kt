@@ -59,7 +59,7 @@ fun GoalCardDemo(
                 .padding(8.dp)
         ) {
             Column(
-                modifier = Modifier.padding(10.dp),
+                modifier = Modifier.padding(10.dp).weight(weight = 1f, fill = false),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -73,7 +73,7 @@ fun GoalCardDemo(
                             )
                         )
                         {
-                            append(goal.name)
+                            append("Goal name:" + goal.name + " ")
                         }
                         withStyle(
                             style = SpanStyle(

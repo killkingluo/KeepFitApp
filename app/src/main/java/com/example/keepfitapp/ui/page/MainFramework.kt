@@ -13,7 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -32,6 +31,8 @@ import com.example.keepfitapp.ui.theme.Blue700
 fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel, userSettingViewModel: UserSettingViewModel) {
     val scaffoldState = rememberScaffoldState()
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
     val navigationItems = listOf(Screen.Home, Screen.GoalSetting, Screen.History)
 
     Scaffold(
@@ -43,9 +44,11 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel,
                 modifier= Modifier.fillMaxWidth()
             ) {
                 Row(modifier= Modifier.fillMaxWidth()) {
-                    IconButton(
-                        onClick = { navController.navigateUp() }
-                    ) { Icon(Icons.Filled.ArrowBack, null) }
+                    if(currentDestination?.route != Screen.Home.route) {
+                        IconButton(
+                            onClick = { navController.navigateUp() }
+                        ) { Icon(Icons.Filled.ArrowBack, null) }
+                    }
                     Spacer(Modifier.weight(1f))
                     IconButton(
                         onClick = { navController.navigate(Screen.Settings.route) }
@@ -55,8 +58,6 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel,
         },
         bottomBar = {
             BottomNavigation(backgroundColor = MaterialTheme.colors.surface) {
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentDestination = navBackStackEntry?.destination
                 navigationItems.forEachIndexed { index, navigationItem ->
                     BottomNavigationItem(
                         icon = {
@@ -86,7 +87,6 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(bottom = it.calculateBottomPadding())
-            //.padding(it) // <<-- or simply this
         ) {
             NavHost(
                 navController = navController,
@@ -96,7 +96,7 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel,
                     HomePage(navController = navController, recordViewModel = recordViewModel, goalViewModel = goalViewModel)
                 }
                 composable(Screen.History.route) {
-                    HistoryPage(navController = navController, recordViewModel = recordViewModel, goalViewModel = goalViewModel, userSettingViewModel = userSettingViewModel)
+                    HistoryPage(navController = navController, recordViewModel = recordViewModel, userSettingViewModel = userSettingViewModel)
                 }
                 composable(Screen.Settings.route) {
                     SettingsPage(userSettingViewModel = userSettingViewModel)

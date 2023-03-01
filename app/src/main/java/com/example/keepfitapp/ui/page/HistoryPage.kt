@@ -30,7 +30,6 @@ import java.util.*
 fun HistoryPage(
     navController: NavController,
     recordViewModel: RecordViewModel,
-    goalViewModel: GoalViewModel,
     userSettingViewModel: UserSettingViewModel
 ) {
     val openDialog = remember { mutableStateOf(false) }

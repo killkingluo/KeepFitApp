@@ -14,13 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.keepfitapp.ui.components.ButtonDemo
 import com.example.keepfitapp.ui.components.CardDemo
-import com.example.keepfitapp.TextCardDemo
+import com.example.keepfitapp.ui.components.TextCardDemo
 import com.example.keepfitapp.domain.function.getTodayTimestamp
 import com.example.keepfitapp.domain.model.Screen
 import com.example.keepfitapp.domain.viewmodel.GoalViewModel
 import com.example.keepfitapp.domain.viewmodel.RecordViewModel
+import com.example.keepfitapp.ui.components.HomePageBarChart
 import com.example.keepfitapp.ui.theme.Purple500
 
 @Composable
@@ -44,10 +44,11 @@ fun HomePage(navController: NavController, goalViewModel : GoalViewModel, record
         CardDemo(steps = currentRecordState?.target_steps ?: 0, cardName = "Goal   ")
         CardDemo(steps = currentRecordState?.current_steps ?: 0, cardName = "Current   ")
         CardDemo(steps = currentRemainSteps, cardName = "Remaining   ")
+        HomePageBarChart(goalSteps = currentRecordState?.target_steps ?: 0, currentSteps = currentRecordState?.current_steps ?: 0)
         FloatingActionButton(
             modifier = Modifier.size(width = 70.dp,height = 70.dp)
             .align(Alignment.CenterHorizontally),
-            backgroundColor = Purple500,
+            backgroundColor = Color(0xFF4552B8),
             onClick = { navController.navigate(Screen.LogSteps.route) }
         ) {
             Icon(
@@ -56,5 +57,6 @@ fun HomePage(navController: NavController, goalViewModel : GoalViewModel, record
                 tint = Color.White,
                 contentDescription = "Localized description")
         }
+
     }
 }

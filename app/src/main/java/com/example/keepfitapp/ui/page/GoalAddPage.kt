@@ -35,14 +35,14 @@ fun GoalAddPage(navController: NavController, goalViewModel: GoalViewModel) {
             text = "Goal Name", modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
             style = MaterialTheme.typography.h6
         )
-        newGoalName = textFieldDemo(KeyboardType.Text, textFieldValue = newGoalName, checkType = 1)
+        newGoalName = textFieldDemo(KeyboardType.Text, textFieldValue = newGoalName , checkType = 1)
         Text(
             text = "Target Step Number",
             modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
             style = MaterialTheme.typography.h6
         )
         newGoalSteps =
-            textFieldDemo(KeyboardType.Number, textFieldValue = newGoalSteps, checkType = 0)
+            textFieldDemo(KeyboardType.Number, textFieldValue = if (newGoalSteps == "0") "" else newGoalSteps, checkType = 0)
 
         Box(
             modifier = Modifier.fillMaxWidth(),

@@ -1,5 +1,6 @@
 package com.example.keepfitapp.ui.components
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -11,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -83,6 +86,13 @@ fun CardDemo(steps: Int, cardName: String) {
 @Composable
 fun HistoryCardDemo(record: Record, navController: NavController, recordViewModel: RecordViewModel, userSettingViewModel: UserSettingViewModel) {
     val historyEditable = userSettingViewModel.historyEditable.collectAsState(initial = false)
+    val percentage: Float = if (record.target_steps == 0) 0F
+    else if (record.current_steps > record.target_steps) {
+        1F
+    }
+    else {
+        record.current_steps.toFloat() / record.target_steps.toFloat()
+    }
 
     Card(
         modifier = Modifier
@@ -92,12 +102,14 @@ fun HistoryCardDemo(record: Record, navController: NavController, recordViewMode
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth().padding(8.dp)
         ){
             Column(
-                modifier = Modifier.padding(10.dp),
+                modifier = Modifier
+                    .padding(10.dp)
+                    .weight(weight = 1f, fill = false),
                 verticalArrangement = Arrangement.Center,
-                //horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     buildAnnotatedString {
@@ -143,8 +155,33 @@ fun HistoryCardDemo(record: Record, navController: NavController, recordViewMode
                         {
                             append(" Steps")
                         }
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.W900,
+                                fontSize = 20.sp,
+                                letterSpacing = 1.sp
+                            )
+                        )
+                        {
+                            append(" ${String.format("%.2f", record.current_steps.toFloat() / record.target_steps.toFloat() * 100)}%")
+                        }
                     }
                 )
+                    Canvas(
+                        modifier = Modifier.width(300.dp)
+                            .height(15.dp)
+                    ) {
+                        drawRoundRect(
+                            color = Color.LightGray,
+                            size = size,
+                            cornerRadius = CornerRadius(10.dp.toPx(), 10.dp.toPx()),
+                        )
+                        drawRoundRect(
+                            color = Color(0xFF4552B8),
+                            size = Size(width = this.size.width * percentage, height = this.size.height),
+                            cornerRadius = CornerRadius(10.dp.toPx(), 10.dp.toPx()),
+                        )
+                    }
                 Text(
                     text = timeStampToDate(record.joined_date),
                     fontWeight = FontWeight.W900,
