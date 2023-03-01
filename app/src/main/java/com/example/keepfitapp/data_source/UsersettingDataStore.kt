@@ -19,11 +19,18 @@ class DateStoreManager(context: Context) {
 
     companion object{
         val goalEditableKey = booleanPreferencesKey(name = "GOAL_EDITABLE_KEY")
+        val historyEditableKey = booleanPreferencesKey(name = "HISTORY_EDITABLE_KEY")
     }
 
     suspend fun setGoalEditable(isEditable: Boolean) {
         dataStore.edit { pref ->
             pref[goalEditableKey] = isEditable
+        }
+    }
+
+    suspend fun setHistoryEditable(isEditable: Boolean) {
+        dataStore.edit { pref ->
+            pref[historyEditableKey] = isEditable
         }
     }
 
@@ -40,6 +47,22 @@ class DateStoreManager(context: Context) {
             .map { pref ->
                 val goalEditable = pref[goalEditableKey] ?:false
                 goalEditable
+            }
+    }
+
+    fun getHistoryEditable(): Flow<Boolean> {
+        return dataStore.data
+            .catch {exception ->
+                if(exception is IOException) {
+                    emit(emptyPreferences())
+                }
+                else {
+                    throw exception
+                }
+            }
+            .map { pref ->
+                val historyEditable = pref[historyEditableKey] ?:false
+                historyEditable
             }
     }
 }

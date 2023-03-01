@@ -1,5 +1,6 @@
 package com.example.keepfitapp.ui.page
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -17,19 +18,35 @@ import com.example.keepfitapp.domain.viewmodel.UserSettingViewModel
 
 @Composable
 fun SettingsPage(userSettingViewModel: UserSettingViewModel) {
-    val isCheck = userSettingViewModel.goalEditable.collectAsState(initial = false)
+    val isGoalEditable = userSettingViewModel.goalEditable.collectAsState(initial = false)
+    val isHistoryEditable = userSettingViewModel.historyEditable.collectAsState(initial = false)
 
-    Row(modifier = Modifier.padding(5.dp)) {
-        Text(
-            text = "Goal Editable",
-            modifier = Modifier.align(alignment = Alignment.CenterVertically)
-        )
-        Spacer(Modifier.weight(1f))
-        Switch(checked = isCheck.value,
-            onCheckedChange = {
-                userSettingViewModel.setUserSetting(it)
-            }
-        )
-
+    Column(modifier = Modifier.padding(5.dp)) {
+        Row(modifier = Modifier.padding(5.dp)) {
+            //goal editable button
+            Text(
+                text = "Goal Editable",
+                modifier = Modifier.align(alignment = Alignment.CenterVertically)
+            )
+            Spacer(Modifier.weight(1f))
+            Switch(checked = isGoalEditable.value,
+                onCheckedChange = {
+                    userSettingViewModel.setGoalEditable(it)
+                }
+            )
+        }
+        Row(modifier = Modifier.padding(5.dp)) {
+            //history editable button
+            Text(
+                text = "History Editable",
+                modifier = Modifier.align(alignment = Alignment.CenterVertically)
+            )
+            Spacer(Modifier.weight(1f))
+            Switch(checked = isHistoryEditable.value,
+                onCheckedChange = {
+                    userSettingViewModel.setHistoryEditable(it)
+                }
+            )
+        }
     }
 }

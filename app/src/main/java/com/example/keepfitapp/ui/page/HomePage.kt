@@ -2,18 +2,26 @@ package com.example.keepfitapp.ui.page
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.keepfitapp.ButtonDemo
-import com.example.keepfitapp.CardDemo
+import com.example.keepfitapp.ui.components.ButtonDemo
+import com.example.keepfitapp.ui.components.CardDemo
 import com.example.keepfitapp.TextCardDemo
 import com.example.keepfitapp.domain.function.getTodayTimestamp
 import com.example.keepfitapp.domain.model.Screen
 import com.example.keepfitapp.domain.viewmodel.GoalViewModel
 import com.example.keepfitapp.domain.viewmodel.RecordViewModel
+import com.example.keepfitapp.ui.theme.Purple500
 
 @Composable
 fun HomePage(navController: NavController, goalViewModel : GoalViewModel, recordViewModel: RecordViewModel) {
@@ -36,7 +44,17 @@ fun HomePage(navController: NavController, goalViewModel : GoalViewModel, record
         CardDemo(steps = currentRecordState?.target_steps ?: 0, cardName = "Goal   ")
         CardDemo(steps = currentRecordState?.current_steps ?: 0, cardName = "Current   ")
         CardDemo(steps = currentRemainSteps, cardName = "Remaining   ")
-        ButtonDemo(buttonName = "LOG", navController = navController, destinationPage = Screen.LogSteps.route)
-        ButtonDemo(buttonName = "Goal Setting",navController = navController, destinationPage = Screen.GoalSetting.route)
+        FloatingActionButton(
+            modifier = Modifier.size(width = 70.dp,height = 70.dp)
+            .align(Alignment.CenterHorizontally),
+            backgroundColor = Purple500,
+            onClick = { navController.navigate(Screen.LogSteps.route) }
+        ) {
+            Icon(
+                modifier = Modifier.size(width = 50.dp,height = 50.dp),
+                imageVector = Icons.Filled.Add,
+                tint = Color.White,
+                contentDescription = "Localized description")
+        }
     }
 }

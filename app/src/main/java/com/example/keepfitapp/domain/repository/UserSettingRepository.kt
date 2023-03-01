@@ -7,12 +7,19 @@ import javax.inject.Inject
 
 class UserSettingRepository @Inject constructor(private val dateStoreManager: DateStoreManager) {
 
-    suspend fun setUserSetting(goalEditable: Boolean) {
+    suspend fun setGoalEditable(goalEditable: Boolean) {
         dateStoreManager.setGoalEditable(goalEditable)
     }
 
-    fun getUserSetting(): Flow<Boolean> {
+    suspend fun setHistoryEditable(historyEditable: Boolean) {
+        dateStoreManager.setHistoryEditable(historyEditable)
+    }
+
+    fun getGoalEditable(): Flow<Boolean> {
         return dateStoreManager.getGoalEditable()
     }
 
+    fun getHistoryEditable(): Flow<Boolean> {
+        return dateStoreManager.getHistoryEditable()
+    }
 }

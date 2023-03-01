@@ -30,7 +30,13 @@ import com.example.keepfitapp.ui.theme.Blue200
 import com.example.keepfitapp.ui.theme.Blue700
 
 @Composable
-fun GoalCardDemo(navController: NavController, goal: Goal, goalViewModel: GoalViewModel, recordViewModel: RecordViewModel, userSettingViewModel: UserSettingViewModel) {
+fun GoalCardDemo(
+    navController: NavController,
+    goal: Goal,
+    goalViewModel: GoalViewModel,
+    recordViewModel: RecordViewModel,
+    userSettingViewModel: UserSettingViewModel
+) {
     val goalEditable = userSettingViewModel.goalEditable.collectAsState(initial = false)
     val openDeleteDialog = remember { mutableStateOf(false) }
     val openEditableDialog = remember { mutableStateOf(false) }
@@ -96,73 +102,45 @@ fun GoalCardDemo(navController: NavController, goal: Goal, goalViewModel: GoalVi
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                //activity button
-                IconButton(
-                    onClick = {
-                        goalViewModel.newActivityGoal(goal.id)
-                        recordViewModel.updateTargetSteps(target_steps = goal.steps, date = getTodayTimestamp())
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Done,
-                        tint = Color.Black,
-                        contentDescription = null
-                    )
-                }
                 //edit button
-                IconButton(
-                    onClick = {
-                        if(!goalEditable.value) {
-                            openEditableDialog.value = true
+                if (goalEditable.value && goal.activityFlag == 0) {
+                    IconButton(
+                        onClick = {
+                            goalViewModel.setCurrentSelectGoal(goal = goal)
+                            navController.navigate(route = Screen.GoalAdd.route)
                         }
-                        else {
-                            if(goal.activityFlag == 1) {
-                                openActivityGoalEditDialog.value = true
-                            }
-                            else {
-                                goalViewModel.setCurrentSelectGoal(goal = goal)
-                                navController.navigate(route = Screen.GoalAdd.route)
-                            }
-                        }
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Edit,
-                        tint = Color.Black,
-                        contentDescription = null
-                    )
-                    if(openEditableDialog.value) {
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Edit,
+                            tint = Color.Black,
+                            contentDescription = null
+                        )
+                        if (openEditableDialog.value) {
                             SimpleAlertDialog(
                                 title = "Warning",
                                 alertContent = "You set goal to be non-editable.",
                                 onDismiss = { openEditableDialog.value = false }
                             )
-                    }
-                    else if(openActivityGoalEditDialog.value) {
-                        SimpleAlertDialog(
-                            title = "Warning",
-                            alertContent = "You cannot edit an activity goal!",
-                            onDismiss = { openActivityGoalEditDialog.value = false }
-                        )
+                        } else if (openActivityGoalEditDialog.value) {
+                            SimpleAlertDialog(
+                                title = "Warning",
+                                alertContent = "You cannot edit an activity goal!",
+                                onDismiss = { openActivityGoalEditDialog.value = false }
+                            )
+                        }
                     }
                 }
                 //delete button
-                IconButton(
-                    onClick = { openDeleteDialog.value = true }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Delete,
-                        tint = Color.Black,
-                        contentDescription = null
-                    )
-                    if (openDeleteDialog.value) {
-                        if (goal.activityFlag == 1) {
-                            SimpleAlertDialog(
-                                title = "Warning",
-                                alertContent = "You cannot delete an active target",
-                                onDismiss = { openDeleteDialog.value = false }
-                            )
-                        } else {
+                if (goal.activityFlag == 0) {
+                    IconButton(
+                        onClick = { openDeleteDialog.value = true }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            tint = Color.Black,
+                            contentDescription = null
+                        )
+                        if (openDeleteDialog.value) {
                             YesOrNoAlertDialog(
                                 title = "Delete Confirmation",
                                 alertContent = "Please confirm whether you want to delete goal ${goal.name}?",
@@ -174,6 +152,22 @@ fun GoalCardDemo(navController: NavController, goal: Goal, goalViewModel: GoalVi
                             )
                         }
                     }
+                }
+                //activity button
+                IconButton(
+                    onClick = {
+                        goalViewModel.newActivityGoal(goal.id)
+                        recordViewModel.updateTargetSteps(
+                            target_steps = goal.steps,
+                            date = getTodayTimestamp()
+                        )
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Done,
+                        tint = Color.Black,
+                        contentDescription = null
+                    )
                 }
             }
         }

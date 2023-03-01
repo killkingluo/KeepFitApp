@@ -1,4 +1,4 @@
-package com.example.keepfitapp
+package com.example.keepfitapp.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
@@ -8,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +23,7 @@ import com.example.keepfitapp.domain.function.timeStampToDate
 import com.example.keepfitapp.domain.model.Record
 import com.example.keepfitapp.domain.model.Screen
 import com.example.keepfitapp.domain.viewmodel.RecordViewModel
+import com.example.keepfitapp.domain.viewmodel.UserSettingViewModel
 
 @Composable
 fun CardDemo(steps: Int, cardName: String) {
@@ -76,9 +78,12 @@ fun CardDemo(steps: Int, cardName: String) {
         }
     }
 }
+
 //For history page to use
 @Composable
-fun HistoryCardDemo(record: Record, navController: NavController, recordViewModel: RecordViewModel) {
+fun HistoryCardDemo(record: Record, navController: NavController, recordViewModel: RecordViewModel, userSettingViewModel: UserSettingViewModel) {
+    val historyEditable = userSettingViewModel.historyEditable.collectAsState(initial = false)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -147,18 +152,19 @@ fun HistoryCardDemo(record: Record, navController: NavController, recordViewMode
                     letterSpacing = 1.sp
                 )
             }
-            IconButton(
-                onClick = {
-                    recordViewModel.setCurrentSelectedRecord(record)
-                    navController.navigate(route = Screen.EditRecord.route)
+            if(historyEditable.value) {
+                IconButton(
+                    onClick = {
+                        recordViewModel.setCurrentSelectedRecord(record)
+                        navController.navigate(route = Screen.EditRecord.route)
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Edit,
+                        tint = Color.Black,
+                        contentDescription = null)
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Edit,
-                    tint = Color.Black,
-                    contentDescription = null)
             }
-
         }
     }
 }

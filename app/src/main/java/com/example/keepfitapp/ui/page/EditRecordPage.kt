@@ -17,6 +17,7 @@ import com.example.keepfitapp.domain.model.Record
 import com.example.keepfitapp.domain.model.Screen
 import com.example.keepfitapp.domain.viewmodel.GoalViewModel
 import com.example.keepfitapp.domain.viewmodel.RecordViewModel
+import com.example.keepfitapp.ui.components.CardDemo
 import com.example.keepfitapp.ui.components.textFieldDemo
 
 @Composable
@@ -36,12 +37,13 @@ fun EditRecordPage(
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center
         )
+        CardDemo(steps = currentSelectedRecord.current_steps, cardName = "Current ")
         Text(
             text = "Add steps", modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
             style = MaterialTheme.typography.h6
         )
         //输入步数
-        inputSteps = textFieldDemo(KeyboardType.Number, textFieldValue = inputSteps, checkType = 0)
+        inputSteps = textFieldDemo(KeyboardType.Number, textFieldValue = "", checkType = 0)
         Text(
             text = "Select a new goal",
             modifier = Modifier.align(alignment = Alignment.CenterHorizontally),

@@ -11,17 +11,25 @@ import javax.inject.Inject
 
 interface UserSettingViewModelAbstract {
     val goalEditable: Flow<Boolean>
-    fun setUserSetting(goalEditable: Boolean)
+    val historyEditable: Flow<Boolean>
+    fun setGoalEditable(goalEditable: Boolean)
+    fun setHistoryEditable(historyEditable: Boolean)
 }
 
 @HiltViewModel
 class UserSettingViewModel @Inject constructor(
     private val userSettingRepository: UserSettingRepository,
 ) : ViewModel(), UserSettingViewModelAbstract {
-    private val ioScope = CoroutineScope(Dispatchers.IO)
-    override val goalEditable = userSettingRepository.getUserSetting()
 
-    override fun setUserSetting(goalEditable: Boolean) {
-        ioScope.launch {userSettingRepository.setUserSetting(goalEditable)}
+    private val ioScope = CoroutineScope(Dispatchers.IO)
+    override val goalEditable = userSettingRepository.getGoalEditable()
+    override val historyEditable = userSettingRepository.getHistoryEditable()
+
+    override fun setGoalEditable(goalEditable: Boolean) {
+        ioScope.launch {userSettingRepository.setGoalEditable(goalEditable)}
+    }
+
+    override fun setHistoryEditable(historyEditable: Boolean) {
+        ioScope.launch {userSettingRepository.setHistoryEditable(historyEditable)}
     }
 }

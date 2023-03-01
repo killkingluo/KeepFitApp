@@ -32,7 +32,7 @@ import com.example.keepfitapp.ui.theme.Blue700
 fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel, userSettingViewModel: UserSettingViewModel) {
     val scaffoldState = rememberScaffoldState()
     val navController = rememberNavController()
-    val navigationItems = listOf(Screen.Home, Screen.History)
+    val navigationItems = listOf(Screen.Home, Screen.GoalSetting, Screen.History)
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -48,13 +48,7 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel,
                     ) { Icon(Icons.Filled.ArrowBack, null) }
                     Spacer(Modifier.weight(1f))
                     IconButton(
-                        onClick = {
-                            navController.navigate(Screen.Settings.route) {
-                                popUpTo(navController.graph.findStartDestination().id) { saveState = true }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        }
+                        onClick = { navController.navigate(Screen.Settings.route) }
                     ) { Icon(Icons.Filled.Settings, null) }
                 }
             }
@@ -68,7 +62,8 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel,
                         icon = {
                             when(index){
                                 0 -> Icon(Icons.Filled.Home, contentDescription = null)
-                                else -> Icon(Icons.Filled.Info, contentDescription = null)
+                                1 -> Icon(Icons.Filled.CheckCircle, contentDescription = null)
+                                else -> Icon(Icons.Filled.DateRange, contentDescription = null)
                             }
                         },
                         label = { Text(stringResource(navigationItem.resourceId)) },
@@ -76,7 +71,6 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel,
                         selectedContentColor =  Blue700,
                         unselectedContentColor =  Color.Gray,
                         onClick = { navController.navigate(navigationItem.route) {
-                            popUpTo(navController.graph.findStartDestination().id) { saveState = true }
                             launchSingleTop = true
                             restoreState = true
                         }
@@ -102,7 +96,7 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel,
                     HomePage(navController = navController, recordViewModel = recordViewModel, goalViewModel = goalViewModel)
                 }
                 composable(Screen.History.route) {
-                    HistoryPage(navController = navController, recordViewModel = recordViewModel, goalViewModel = goalViewModel)
+                    HistoryPage(navController = navController, recordViewModel = recordViewModel, goalViewModel = goalViewModel, userSettingViewModel = userSettingViewModel)
                 }
                 composable(Screen.Settings.route) {
                     SettingsPage(userSettingViewModel = userSettingViewModel)

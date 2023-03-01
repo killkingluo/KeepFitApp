@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.keepfitapp.CardDemo
+import com.example.keepfitapp.ui.components.CardDemo
 import com.example.keepfitapp.domain.function.getTodayTimestamp
 import com.example.keepfitapp.domain.function.inputCheck
 import com.example.keepfitapp.domain.model.Screen
