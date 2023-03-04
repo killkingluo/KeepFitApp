@@ -40,13 +40,13 @@ fun EditRecordPage(
         )
         CurrentBar(currentSteps = currentSelectedRecord.current_steps)
         Text(
-            text = "Add steps", modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+            text = "Add Steps", modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
             style = MaterialTheme.typography.h6
         )
         //输入步数
         inputSteps = textFieldDemo(KeyboardType.Number, textFieldValue = "", checkType = 0, labelId = "Add steps", contentDescription = "Add steps")
         Text(
-            text = "Select a new goal",
+            text = "Select a New Goal",
             modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
             style = MaterialTheme.typography.h6
         )
@@ -58,6 +58,7 @@ fun EditRecordPage(
             contentAlignment = Alignment.Center
         ) {
             Button(
+                colors = ButtonDefaults.buttonColors(Color(0xFF4552B8)),
                 onClick = {
                     //check input
                     inputError = inputCheck(text = inputSteps, regex = "^\\d{1,7}\$")
@@ -90,7 +91,10 @@ fun EditRecordPage(
                     }
                 }
             ) {
-                Text("Submit")
+                Text(
+                    color = Color.White,
+                    text = "Submit"
+                )
             }
         }
     }

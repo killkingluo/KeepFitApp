@@ -42,7 +42,7 @@ fun LogStepsPage(navController: NavController, recordViewModel: RecordViewModel)
         ) {
             Button(
                 shape = RoundedCornerShape(50),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE9D7F7)),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF4552B8)),
                 onClick = {
                     inputError = inputCheck(text = inputSteps, regex = "^\\d{1,7}\$")
                     if (!inputError) {
@@ -61,7 +61,10 @@ fun LogStepsPage(navController: NavController, recordViewModel: RecordViewModel)
                     }
                 }
             ) {
-                Text("Submit")
+                Text(
+                    color = Color.White,
+                    text = "Submit"
+                )
             }
         }
     }

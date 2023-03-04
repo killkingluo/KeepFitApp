@@ -9,5 +9,5 @@
     <string name="EditRecord">EditRecord</string>
 
     <string name="no_goal_description">Please add a new goal~</string>
-    <string name="goal_add_button">Add a new goal</string>
+    <string name="goal_add_button">New Goal</string>
 </resources>

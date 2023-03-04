@@ -43,19 +43,22 @@ fun GoalSetPage(navController: NavController, goalViewModel: GoalViewModel, reco
         ) {
             Button(
                 shape = RoundedCornerShape(50),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE9D7F7),),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF4552B8)),
                 onClick = {
                     goalViewModel.setCurrentSelectGoal(Goal(id = -1, name = "", steps = 0))
                     navController.navigate(route = Screen.GoalAdd.route)
                 }
             ) {
                 Icon(
-                    Icons.Filled.Add,
+                    tint = Color.White,
+                    imageVector = Icons.Filled.Add,
                     contentDescription = null,
                     modifier = Modifier.size(ButtonDefaults.IconSize)
                 )
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text(text = stringResource(id = R.string.goal_add_button))
+                Text(
+                    color = Color.White,
+                    text = stringResource(id = R.string.goal_add_button))
             }
         }
     }

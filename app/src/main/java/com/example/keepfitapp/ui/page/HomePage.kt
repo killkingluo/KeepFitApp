@@ -48,9 +48,9 @@ fun HomePage(navController: NavController, goalViewModel : GoalViewModel, record
         RemainBar(remainingSteps = currentRemainSteps)
         HomePageBarChart(goalSteps = currentRecordState?.target_steps ?: 0, currentSteps = currentRecordState?.current_steps ?: 0)
         FloatingActionButton(
-            modifier = Modifier.size(width = 70.dp,height = 70.dp)
+            modifier = Modifier.size(width = 50.dp,height = 50.dp)
             .align(Alignment.CenterHorizontally),
-            backgroundColor = Color(0xFFD6E1FF),
+            backgroundColor = Color(0xFF4552B8),
             onClick = { navController.navigate(Screen.LogSteps.route) }
         ) {
             Icon(

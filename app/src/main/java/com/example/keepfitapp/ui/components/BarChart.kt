@@ -28,7 +28,7 @@ fun HomePageBarChart(goalSteps: Int, currentSteps: Int) {
             .fillMaxWidth()
             .padding(5.dp)
             .clip(shape = RoundedCornerShape(corner = CornerSize(12.dp))),
-        backgroundColor = Color(0xFFE9D7F7),
+        backgroundColor = Color(0xFFEDB8F5),
         elevation = 10.dp
     ) {
         Column(

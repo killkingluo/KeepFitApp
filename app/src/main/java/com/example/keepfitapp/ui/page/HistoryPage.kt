@@ -7,10 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -57,7 +54,8 @@ fun HistoryPage(
             Text(
                 text = "Tip: You can click the add button to edit a record",
                 modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.h6
             )
         }
         LazyColumn(modifier = Modifier.weight(2f)) {
@@ -85,13 +83,14 @@ fun HistoryPage(
                 ) {
                     Button(
                         shape = RoundedCornerShape(50),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE9D7F7)),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF4552B8)),
                         onClick = {
                             dateDialogState.show()
                         }
                     ) {
                         Icon(
-                            Icons.Filled.Add,
+                            tint = Color.White,
+                            imageVector = Icons.Filled.Add,
                             contentDescription = null,
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
@@ -105,11 +104,12 @@ fun HistoryPage(
             ) {
                 Button(
                     shape = RoundedCornerShape(50),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE9D7F7)),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF4552B8)),
                     onClick = { openDialog.value = true }
                 ) {
                     Icon(
-                        Icons.Filled.Delete,
+                        tint = Color.White,
+                        imageVector = Icons.Filled.Delete,
                         contentDescription = null,
                         modifier = Modifier.size(ButtonDefaults.IconSize)
                     )

@@ -144,7 +144,7 @@ fun RemainBar(remainingSteps: Int){
         .padding(5.dp)
         .height(100.dp)
         .clip(shape = RoundedCornerShape(corner = CornerSize(12.dp))),
-        color = Color(0xFFE9D7F7)
+        color = Color(0xD7D5B7EC)
     ) {
         Column(
             modifier = Modifier.padding(12.dp),
@@ -199,7 +199,17 @@ fun HistoryCardDemo(record: Record, navController: NavController, recordViewMode
                         withStyle(
                             style = SpanStyle(
                                 fontWeight = FontWeight.W900,
-                                fontSize = 20.sp,
+                                fontSize = 15.sp,
+                                letterSpacing = 1.sp
+                            )
+                        )
+                        {
+                            append(" Steps: ")
+                        }
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.W900,
+                                fontSize = 15.sp,
                                 letterSpacing = 1.sp,
                                 color = Color(0xFF4552B8)
                             )
@@ -211,7 +221,7 @@ fun HistoryCardDemo(record: Record, navController: NavController, recordViewMode
                             style = SpanStyle(
                                 color = Color.Black,
                                 fontWeight = FontWeight.W900,
-                                fontSize = 20.sp,
+                                fontSize = 15.sp,
                                 letterSpacing = 1.sp
                             )
                         )
@@ -221,7 +231,7 @@ fun HistoryCardDemo(record: Record, navController: NavController, recordViewMode
                         withStyle(
                             style = SpanStyle(
                                 fontWeight = FontWeight.W900,
-                                fontSize = 20.sp,
+                                fontSize = 15.sp,
                                 letterSpacing = 1.sp,
                                 color = Color(0xFF4552B8)
                             )
@@ -231,17 +241,7 @@ fun HistoryCardDemo(record: Record, navController: NavController, recordViewMode
                         withStyle(
                             style = SpanStyle(
                                 fontWeight = FontWeight.W900,
-                                fontSize = 20.sp,
-                                letterSpacing = 1.sp
-                            )
-                        )
-                        {
-                            append(" Steps")
-                        }
-                        withStyle(
-                            style = SpanStyle(
-                                fontWeight = FontWeight.W900,
-                                fontSize = 20.sp,
+                                fontSize = 15.sp,
                                 letterSpacing = 1.sp
                             )
                         )

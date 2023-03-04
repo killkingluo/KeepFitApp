@@ -32,6 +32,7 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel,
     val scaffoldState = rememberScaffoldState()
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val settingSelected = remember { mutableStateOf(false) }
     val currentDestination = navBackStackEntry?.destination
     val navigationItems = listOf(Screen.Home, Screen.Goal, Screen.History)
 
@@ -51,8 +52,13 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel,
                     }
                     Spacer(Modifier.weight(1f))
                     IconButton(
-                        onClick = { navController.navigate(Screen.Settings.route) }
-                    ) { Icon(Icons.Filled.Settings, null) }
+                        onClick = {
+                            navController.navigate(Screen.Settings.route)
+                        }
+                    ) { Icon(
+                        imageVector = Icons.Filled.Settings,
+                        contentDescription = null
+                    ) }
                 }
             }
         },
@@ -69,7 +75,7 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel,
                         },
                         label = { Text(stringResource(navigationItem.resourceId)) },
                         selected = currentDestination?.hierarchy?.any { it.route == navigationItem.route } == true,
-                        selectedContentColor =  Blue700,
+                        selectedContentColor =  Color(0xFF4552B8),
                         unselectedContentColor =  Color.Gray,
                         onClick = { navController.navigate(navigationItem.route) {
                             launchSingleTop = true

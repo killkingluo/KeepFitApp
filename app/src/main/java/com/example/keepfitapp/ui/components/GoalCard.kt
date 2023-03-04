@@ -64,16 +64,26 @@ fun GoalCardDemo(
             Column(
                 modifier = Modifier.padding(10.dp).weight(weight = 1f, fill = false),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                //horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     fontWeight = FontWeight.W900,
                     fontSize = 15.sp,
                     letterSpacing = 1.sp,
-                    text = "Goal name:" + goal.name
+                    text = "Goal name: " + goal.name
                 )
                 Text(
                     buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.W900,
+                                fontSize = 15.sp,
+                                letterSpacing = 1.sp
+                            )
+                        )
+                        {
+                            append("Steps: ")
+                        }
                         withStyle(
                             style = SpanStyle(
                                 fontWeight = FontWeight.W900,
@@ -84,16 +94,6 @@ fun GoalCardDemo(
                         )
                         {
                             append(goal.steps.toString())
-                        }
-                        withStyle(
-                            style = SpanStyle(
-                                fontWeight = FontWeight.W900,
-                                fontSize = 15.sp,
-                                letterSpacing = 1.sp
-                            )
-                        )
-                        {
-                            append(" Steps")
                         }
                     }
                 )

@@ -35,12 +35,12 @@ fun GoalAddPage(navController: NavController, goalViewModel: GoalViewModel) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Just Goal", modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+            text = "Goal", modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
             style = MaterialTheme.typography.h6
         )
         newGoalName = textFieldDemo(KeyboardType.Text, textFieldValue = newGoalName , checkType = 1, labelId = " Enter Goal Name ", contentDescription = "Set goal steps")
         Text(
-            text = "Target Step Number",
+            text = "Target",
             modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
             style = MaterialTheme.typography.h6
         )
@@ -53,7 +53,7 @@ fun GoalAddPage(navController: NavController, goalViewModel: GoalViewModel) {
         ) {
             Button(
                 shape = RoundedCornerShape(50),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE9D7F7),),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF4552B8)),
                 onClick = {
                     inputGoalNameError = inputCheck(text = newGoalName, regex = "^[a-zA-Z].*")
                     inputGoalStepsError = inputCheck(text = newGoalSteps, regex = "^\\d{1,7}\$")
@@ -80,7 +80,10 @@ fun GoalAddPage(navController: NavController, goalViewModel: GoalViewModel) {
                     }
                 }
             ) {
-                Text("Submit")
+                Text(
+                    color = Color.White,
+                    text = "Submit"
+                )
             }
         }
     }
