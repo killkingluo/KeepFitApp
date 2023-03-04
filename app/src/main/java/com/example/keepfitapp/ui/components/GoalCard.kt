@@ -1,6 +1,8 @@
 package com.example.keepfitapp.ui.components
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -12,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -26,8 +29,7 @@ import com.example.keepfitapp.domain.model.Screen
 import com.example.keepfitapp.domain.viewmodel.GoalViewModel
 import com.example.keepfitapp.domain.viewmodel.RecordViewModel
 import com.example.keepfitapp.domain.viewmodel.UserSettingViewModel
-import com.example.keepfitapp.ui.theme.Blue200
-import com.example.keepfitapp.ui.theme.Blue700
+
 
 @Composable
 fun GoalCardDemo(
@@ -45,11 +47,12 @@ fun GoalCardDemo(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(5.dp)
+            .clip(shape = RoundedCornerShape(corner = CornerSize(12.dp))),
         elevation = 10.dp,
         backgroundColor = when (goal.activityFlag) {
-            0 -> Blue200
-            else -> Blue700
+            0 -> Color(0xFFE9D7F7)
+            else -> Color(0xFFD6E1FF)
         }
     ) {
         Row(
@@ -64,31 +67,28 @@ fun GoalCardDemo(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
+                    fontWeight = FontWeight.W900,
+                    fontSize = 15.sp,
+                    letterSpacing = 1.sp,
+                    text = "Goal name:" + goal.name
+                )
+                Text(
                     buildAnnotatedString {
-                        withStyle(
-                            style = SpanStyle(
-                                fontWeight = FontWeight.W900,
-                                fontSize = 10.sp,
-                                letterSpacing = 1.sp
-                            )
-                        )
-                        {
-                            append("Goal name:" + goal.name + " ")
-                        }
                         withStyle(
                             style = SpanStyle(
                                 fontWeight = FontWeight.W900,
                                 fontSize = 20.sp,
                                 letterSpacing = 1.sp,
-                                color = Color(0xFF4552B8)
+                                color = Color(0xFF4552B8),
                             )
-                        ) {
+                        )
+                        {
                             append(goal.steps.toString())
                         }
                         withStyle(
                             style = SpanStyle(
                                 fontWeight = FontWeight.W900,
-                                fontSize = 10.sp,
+                                fontSize = 15.sp,
                                 letterSpacing = 1.sp
                             )
                         )

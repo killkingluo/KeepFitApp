@@ -4,22 +4,31 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.keepfitapp.ui.components.HistoryCardDemo
 import com.example.keepfitapp.domain.function.localdateToTimestamp
 import com.example.keepfitapp.domain.model.Screen
-import com.example.keepfitapp.domain.viewmodel.GoalViewModel
 import com.example.keepfitapp.domain.viewmodel.RecordViewModel
 import com.example.keepfitapp.domain.viewmodel.UserSettingViewModel
 import com.example.keepfitapp.ui.components.YesOrNoAlertDialog
 import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.LocalDate
@@ -42,10 +51,11 @@ fun HistoryPage(
         modifier = Modifier
             .padding(5.dp)
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         if (historyEditable.value) {
             Text(
-                text = "Tip: You can click the edit button to edit a record",
+                text = "Tip: You can click the add button to edit a record",
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
@@ -61,41 +71,60 @@ fun HistoryPage(
                 )
             }
         }
-        //Select data button
-        if (historyEditable.value) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            //Select data button
+            if (historyEditable.value) {
+                Box(
+                    contentAlignment = Alignment.Center
+                ) {
+                    Button(
+                        shape = RoundedCornerShape(50),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE9D7F7)),
+                        onClick = {
+                            dateDialogState.show()
+                        }
+                    ) {
+                        Icon(
+                            Icons.Filled.Add,
+                            contentDescription = null,
+                            modifier = Modifier.size(ButtonDefaults.IconSize)
+                        )
+                        //Text("Select data to add steps")
+                    }
+                }
+            }
+            //Delete Button
             Box(
-                modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
                 Button(
-                    onClick = {
-                        dateDialogState.show()
-                    }
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE9D7F7)),
+                    onClick = { openDialog.value = true }
                 ) {
-                    Text("Select data to add steps")
-                }
-            }
-        }
-        //Delete Button
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            Button(
-                onClick = { openDialog.value = true }
-            ) {
-                Text("Delete All History")
-                if (openDialog.value) {
-                    YesOrNoAlertDialog(
-                        title = "Delete Confirmation",
-                        alertContent = "Please confirm whether you want to delete all records(Include today)?",
-                        onDismiss = { openDialog.value = false },
-                        toDO = {
-                            recordViewModel.deleteAllRecord()
-                            recordViewModel.initialization()
-                            openDialog.value = false
-                        }
+                    Icon(
+                        Icons.Filled.Delete,
+                        contentDescription = null,
+                        modifier = Modifier.size(ButtonDefaults.IconSize)
                     )
+                    if (openDialog.value) {
+                        YesOrNoAlertDialog(
+                            title = "Delete Confirmation",
+                            alertContent = "Please confirm whether you want to delete all records(Include today)?",
+                            onDismiss = { openDialog.value = false },
+                            toDO = {
+                                recordViewModel.deleteAllRecord()
+                                recordViewModel.initialization()
+                                openDialog.value = false
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -104,7 +133,9 @@ fun HistoryPage(
     MaterialDialog(
         dialogState = dateDialogState,
         buttons = {
-            positiveButton(text = "Ok") {
+            positiveButton(
+                text = "Ok",
+            ) {
                 //set currentSelectedRecord
                 recordViewModel.getSelectDateRecord(localdateToTimestamp(pickDate.value))
                 navController.navigate(route = Screen.EditRecord.route)
@@ -114,7 +145,11 @@ fun HistoryPage(
     ) {
         this.datepicker(
             initialDate = LocalDate.now(),
-            title = "Pick a data",
+            colors = DatePickerDefaults.colors(headerBackgroundColor = Color(0xFFE9D7F7)),
+            title =  "Select a date to add steps",
+            allowedDateValidator = {
+                it <= LocalDate.now()
+            }
         ) {
             pickDate.value = it
         }

@@ -1,12 +1,14 @@
 package com.example.keepfitapp.ui.page
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -28,27 +30,30 @@ fun GoalAddPage(navController: NavController, goalViewModel: GoalViewModel) {
     Column(
         modifier = Modifier
             .padding(5.dp)
-            .fillMaxHeight(),
+            .fillMaxHeight()
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Goal Name", modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+            text = "Just Goal", modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
             style = MaterialTheme.typography.h6
         )
-        newGoalName = textFieldDemo(KeyboardType.Text, textFieldValue = newGoalName , checkType = 1)
+        newGoalName = textFieldDemo(KeyboardType.Text, textFieldValue = newGoalName , checkType = 1, labelId = " Enter Goal Name ", contentDescription = "Set goal steps")
         Text(
             text = "Target Step Number",
             modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
             style = MaterialTheme.typography.h6
         )
         newGoalSteps =
-            textFieldDemo(KeyboardType.Number, textFieldValue = if (newGoalSteps == "0") "" else newGoalSteps, checkType = 0)
+            textFieldDemo(KeyboardType.Number, textFieldValue = if (newGoalSteps == "0") "" else newGoalSteps, checkType = 0, labelId = "Set goal steps", contentDescription = "Set goal steps")
 
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
             Button(
+                shape = RoundedCornerShape(50),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFE9D7F7),),
                 onClick = {
                     inputGoalNameError = inputCheck(text = newGoalName, regex = "^[a-zA-Z].*")
                     inputGoalStepsError = inputCheck(text = newGoalSteps, regex = "^\\d{1,7}\$")
@@ -69,8 +74,8 @@ fun GoalAddPage(navController: NavController, goalViewModel: GoalViewModel) {
                                 )
                             )
                         }
-                        navController.navigate(Screen.GoalSetting.route) {
-                            popUpTo(Screen.GoalSetting.route) { inclusive = true }
+                        navController.navigate(Screen.Goal.route) {
+                            popUpTo(Screen.Goal.route) { inclusive = true }
                         }
                     }
                 }

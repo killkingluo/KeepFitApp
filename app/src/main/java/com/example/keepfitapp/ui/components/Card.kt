@@ -2,16 +2,16 @@ package com.example.keepfitapp.ui.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -33,7 +33,7 @@ fun CardDemo(steps: Int, cardName: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(5.dp),
         elevation = 10.dp
     ) {
         Column(
@@ -82,6 +82,87 @@ fun CardDemo(steps: Int, cardName: String) {
     }
 }
 
+@Composable
+fun GoalBar(GoalSteps: Int){
+    Surface(
+        modifier = Modifier
+        .fillMaxWidth()
+        .padding(5.dp)
+        .height(100.dp)
+        .clip(shape = RoundedCornerShape(corner = CornerSize(12.dp))),
+        color = Color(0xFFD6E1FF)
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+
+            Text(text = "Goal",
+                style = MaterialTheme.typography.h5
+            )
+            Text(text = "$GoalSteps",
+                style =MaterialTheme.typography.h5
+            )
+        }
+
+    }
+
+}
+
+@Composable
+fun CurrentBar(currentSteps: Int){
+    Surface(modifier = Modifier
+        .fillMaxWidth()
+        .padding(5.dp)
+        .height(100.dp)
+        .clip(shape = RoundedCornerShape(corner = CornerSize(12.dp))),
+        color = Color(0xFFE9D7F7)
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+
+            Text(text = "Current Steps",
+                style = MaterialTheme.typography.h5
+            )
+            Text(text = "$currentSteps",
+                style =MaterialTheme.typography.h5
+            )
+        }
+
+    }
+
+}
+
+@Composable
+fun RemainBar(remainingSteps: Int){
+    Surface(modifier = Modifier
+        .fillMaxWidth()
+        .padding(5.dp)
+        .height(100.dp)
+        .clip(shape = RoundedCornerShape(corner = CornerSize(12.dp))),
+        color = Color(0xFFE9D7F7)
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+
+            Text(text = "Remaining Steps",
+                style = MaterialTheme.typography.h5
+            )
+            Text(text = "$remainingSteps",
+                style =MaterialTheme.typography.h5)
+        }
+
+    }
+
+}
+
 //For history page to use
 @Composable
 fun HistoryCardDemo(record: Record, navController: NavController, recordViewModel: RecordViewModel, userSettingViewModel: UserSettingViewModel) {
@@ -94,10 +175,12 @@ fun HistoryCardDemo(record: Record, navController: NavController, recordViewMode
         record.current_steps.toFloat() / record.target_steps.toFloat()
     }
 
-    Card(
+    Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(5.dp)
+            .clip(shape = RoundedCornerShape(corner = CornerSize(12.dp))),
+        color = Color(0xFFE9D7F7),
         elevation = 10.dp
     ) {
         Row(
@@ -177,7 +260,7 @@ fun HistoryCardDemo(record: Record, navController: NavController, recordViewMode
                             cornerRadius = CornerRadius(10.dp.toPx(), 10.dp.toPx()),
                         )
                         drawRoundRect(
-                            color = Color(0xFF4552B8),
+                            color = Color(0xFFD6E1FF),
                             size = Size(width = this.size.width * percentage, height = this.size.height),
                             cornerRadius = CornerRadius(10.dp.toPx(), 10.dp.toPx()),
                         )

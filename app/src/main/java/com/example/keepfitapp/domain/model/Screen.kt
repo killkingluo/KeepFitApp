@@ -9,7 +9,7 @@ sealed class Screen(val route: String, @StringRes val resourceId: Int) {
     object History : Screen("History", R.string.History)
     object Settings : Screen("Settings", R.string.Settings)
     object LogSteps : Screen("LogSteps", R.string.LogSteps)
-    object GoalSetting : Screen("GoalSetting", R.string.GoalSetting)
+    object Goal : Screen("Goal", R.string.Goal)
     object GoalAdd : Screen("GoalAdd", R.string.GoalAdd)
 
     object EditRecord : Screen("EditRecord", R.string.GoalAdd)

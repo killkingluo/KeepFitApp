@@ -33,7 +33,7 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel,
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    val navigationItems = listOf(Screen.Home, Screen.GoalSetting, Screen.History)
+    val navigationItems = listOf(Screen.Home, Screen.Goal, Screen.History)
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -104,7 +104,7 @@ fun MainFramework(goalViewModel: GoalViewModel,recordViewModel: RecordViewModel,
                 composable(Screen.LogSteps.route) {
                     LogStepsPage(navController = navController, recordViewModel = recordViewModel)
                 }
-                composable(route = Screen.GoalSetting.route) {
+                composable(route = Screen.Goal.route) {
                     GoalSetPage(navController = navController, goalViewModel = goalViewModel, recordViewModel = recordViewModel, userSettingViewModel = userSettingViewModel)
                 }
                 composable(Screen.GoalAdd.route) {
